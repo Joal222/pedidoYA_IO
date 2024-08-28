@@ -3,27 +3,20 @@ package FormatoBase.proyectoJWT.model.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
-/**
- * $table.getTableComment()
- */
 @Data
 @Entity
-@Table(name = "ruta_entrega_detalle")
-public class RutaEntregaDetalle implements Serializable {
+@Table(name = "estados")
+public class Estados {
 
     @Id
+    @Column(name = "id_estado", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_ruta_entrega_detalle", nullable = false)
-    private Long idRutaEntregaDetalle;
+    private Long idEstado;
 
-    @Column(name = "id_rutaentrega")
-    private Long idRutaentrega;
-
-    @Column(name = "horarios_entrega")
-    private String horariosEntrega;
+    @Column(name = "nombre", nullable = false)
+    private String nombre;
 
     @Column(name = "creado_por", nullable = false)
     private String creadoPor;

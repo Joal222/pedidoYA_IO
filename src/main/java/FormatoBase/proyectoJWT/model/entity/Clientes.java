@@ -1,37 +1,25 @@
 package FormatoBase.proyectoJWT.model.entity;
 
+import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Data;
-
-import java.io.Serializable;
-import java.util.Date;
+import lombok.*;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
 @Entity
 @Table(name = "clientes")
-public class Clientes implements Serializable {
-
+public class Clientes extends BaseEntity{
     @Id
     @Column(name = "id_cliente", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idCliente;
+    private Integer idCliente;
 
     @Column(name = "id_ruta_entrega_detalle")
-    private Long idRutaEntregaDetalle;
+    private int idRutaEntregaDetalle;
 
     @Column(name = "id_usuario")
-    private Long idUsuario;
-
-    @Column(name = "creado_por", nullable = false)
-    private String creadoPor;
-
-    @Column(name = "fecha_creacion")
-    private Date fechaCreacion;
-
-    @Column(name = "fecha_modificacion")
-    private Date fechaModificacion;
-
-    @Column(name = "modificado_por", nullable = false)
-    private String modificadoPor;
-
+    private int idUsuario;
 }

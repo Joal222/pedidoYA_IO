@@ -3,27 +3,24 @@ package FormatoBase.proyectoJWT.model.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "usuario")
-public class Usuario implements Serializable {
+@Table(name = "ruta_recoleccion")
+public class RutaRecoleccion {
 
     @Id
-    @Column(name = "id_usuario", nullable = false)
+    @Column(name = "id_recoleccion", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idUsuario;
+    private Long idRecoleccion;
 
-    @Column(name = "rol")
-    private Long rol;
+    @Column(name = "id_vehiculo")
+    private Long idVehiculo;
 
-    @Column(name = "email", nullable = false)
-    private String email;
-
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Column(name = "costo_activacion")
+    private BigDecimal costoActivacion;
 
     @Column(name = "creado_por", nullable = false)
     private String creadoPor;

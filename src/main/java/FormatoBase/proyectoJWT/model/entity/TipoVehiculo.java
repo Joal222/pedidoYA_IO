@@ -3,27 +3,20 @@ package FormatoBase.proyectoJWT.model.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "usuario")
-public class Usuario implements Serializable {
+@Table(name = "tipo_vehiculo")
+public class TipoVehiculo {
 
     @Id
-    @Column(name = "id_usuario", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idUsuario;
+    @Column(name = "id_tipo_vehiculo", nullable = false)
+    private Long idTipoVehiculo;
 
-    @Column(name = "rol")
-    private Long rol;
-
-    @Column(name = "email", nullable = false)
-    private String email;
-
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Column(name = "nombre", nullable = false)
+    private String nombre;
 
     @Column(name = "creado_por", nullable = false)
     private String creadoPor;
