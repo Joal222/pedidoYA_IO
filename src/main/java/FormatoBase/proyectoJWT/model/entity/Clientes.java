@@ -4,6 +4,9 @@ import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,4 +25,7 @@ public class Clientes extends BaseEntity{
 
     @Column(name = "id_usuario")
     private int idUsuario;
+
+    @OneToMany(mappedBy = "idCliente",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<ClienteProducto> clienteProductosList = new ArrayList<>();
 }

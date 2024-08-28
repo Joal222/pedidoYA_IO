@@ -5,9 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,17 +15,18 @@ import java.util.List;
 public class ClienteProducto extends BaseEntity {
 
     @Id
-    @Column(name = "id_cliente", nullable = false)
-    private Integer idCliente;
-
-    @Id
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_producto",referencedColumnName = "idProducto",nullable = false)
     private Productos idProducto;
 
+    @Id
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_cliente",referencedColumnName ="idCliente", nullable = false)
+    private Clientes idCliente;
+
     @Column(name = "disponibilidad")
     private int disponibilidad;
-
 
 }
