@@ -1,24 +1,25 @@
 package FormatoBase.proyectoJWT.model.entity;
 
+import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * $table.getTableComment()
- */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
 @Entity
 @Table(name = "productos")
-public class Productos implements Serializable {
+public class Productos extends BaseEntity {
 
     @Id
     @Column(name = "id_producto", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idProducto;
+    private Integer idProducto;
 
     @Column(name = "nombre_producto", nullable = false)
     private String nombreProducto;
@@ -27,24 +28,14 @@ public class Productos implements Serializable {
     private String tipoProducto;
 
     @Column(name = "precio", nullable = false)
-    private BigDecimal precio;
+    private float precio;
 
     @Column(name = "cantidad_disponible")
-    private Long cantidadDisponible;
+    private int cantidadDisponible;
 
     @Column(name = "url")
     private String url;
 
-    @Column(name = "creado_por", nullable = false)
-    private String creadoPor;
-
-    @Column(name = "fecha_creacion")
-    private Date fechaCreacion;
-
-    @Column(name = "fecha_modificacion")
-    private Date fechaModificacion;
-
-    @Column(name = "modificado_por", nullable = false)
-    private String modificadoPor;
-
+    @OneToMany(mappedBy = "idProducto",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<ClienteProducto> clienteProductosList = new ArrayList<>();
 }
