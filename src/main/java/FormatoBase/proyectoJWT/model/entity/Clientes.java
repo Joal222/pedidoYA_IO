@@ -20,12 +20,12 @@ public class Clientes extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCliente;
 
-    @Column(name = "id_ruta_entrega_detalle")
-    private int idRutaEntregaDetalle;
-
     @Column(name = "id_usuario")
     private int idUsuario;
 
     @OneToMany(mappedBy = "idCliente",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ClienteProducto> clienteProductosList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "idCliente", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Pedidos> pedidosList = new ArrayList<>();
 }

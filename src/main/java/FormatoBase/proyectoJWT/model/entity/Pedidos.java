@@ -1,26 +1,31 @@
 package FormatoBase.proyectoJWT.model.entity;
 
+import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-import java.io.Serializable;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * $table.getTableComment()
- */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
 @Entity
 @Table(name = "pedidos")
-public class Pedidos implements Serializable {
+public class Pedidos extends BaseEntity {
 
     @Id
     @Column(name = "id_pedido", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idPedido;
+    private Integer idPedido;
 
-    @Column(name = "id_cliente")
-    private Long idCliente;
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_cliente", referencedColumnName = "idCliente")
+    private Clientes idCliente;
 
     @Column(name = "direccion_entrega")
     private String direccionEntrega;
@@ -28,16 +33,7 @@ public class Pedidos implements Serializable {
     @Column(name = "direccion_recepcion")
     private String direccionRecepcion;
 
-    @Column(name = "creado_por", nullable = false)
-    private String creadoPor;
-
-    @Column(name = "fecha_creacion")
-    private Date fechaCreacion;
-
-    @Column(name = "fecha_modificacion")
-    private Date fechaModificacion;
-
-    @Column(name = "modificado_por", nullable = false)
-    private String modificadoPor;
+    @OneToMany(mappedBy = "idPedido", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<PedidoProducto> pedidoProductosList = new ArrayList<>();
 
 }

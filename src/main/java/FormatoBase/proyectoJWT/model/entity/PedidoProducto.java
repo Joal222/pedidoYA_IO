@@ -1,39 +1,31 @@
 package FormatoBase.proyectoJWT.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Data;
+import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.*;
 
-import java.io.Serializable;
-import java.util.Date;
-
-/**
- * $table.getTableComment()
- */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
 @Entity
 @Table(name = "pedido_producto")
-public class PedidoProducto implements Serializable {
+public class PedidoProducto extends BaseEntity {
 
     @Id
-    @Column(name = "id_pedido", nullable = false)
-    private Long idPedido;
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_pedido", referencedColumnName = "idPedido")
+    private Pedidos idPedido;
 
-    @Column(name = "id_producto", nullable = false)
-    private Long idProducto;
+    @Id
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_producto", referencedColumnName = "idProducto")
+    private Productos idProducto;
 
-    @Column(name = "creado_por", nullable = false)
-    private String creadoPor;
-
-    @Column(name = "fecha_creacion")
-    private Date fechaCreacion;
-
-    @Column(name = "fecha_modificacion")
-    private Date fechaModificacion;
-
-    @Column(name = "modificado_por", nullable = false)
-    private String modificadoPor;
-
+    @Column(name = "cantidad")
+    private int cantidad;
 }
