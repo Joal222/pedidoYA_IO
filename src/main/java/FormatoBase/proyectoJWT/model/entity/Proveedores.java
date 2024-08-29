@@ -28,6 +28,6 @@ public class Proveedores extends BaseEntity {
     @Column(name = "horario_atencion")
     private String horario_atencion;
 
-    @OneToMany(mappedBy = "idProveedor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "proveedor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ProveedorProducto> proveedorProductosList = new ArrayList<>();
 }

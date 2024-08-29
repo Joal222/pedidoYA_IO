@@ -36,12 +36,12 @@ public class Productos extends BaseEntity {
     @Column(name = "url")
     private String url;
 
-    @OneToMany(mappedBy = "idProducto",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "producto",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ClienteProducto> clienteProductosList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ProveedorProducto> proveedorProductosList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PedidoProducto> pedidoProductosList = new ArrayList<>();
 }

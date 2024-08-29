@@ -25,7 +25,8 @@ public class Pedidos extends BaseEntity {
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente", referencedColumnName = "idCliente")
-    private Clientes idCliente;
+    private Clientes cliente;
+
 
     @Column(name = "direccion_entrega")
     private String direccionEntrega;
@@ -33,7 +34,7 @@ public class Pedidos extends BaseEntity {
     @Column(name = "direccion_recepcion")
     private String direccionRecepcion;
 
-    @OneToMany(mappedBy = "idPedido", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PedidoProducto> pedidoProductosList = new ArrayList<>();
 
 }

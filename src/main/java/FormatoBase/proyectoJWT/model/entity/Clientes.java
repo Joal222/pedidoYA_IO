@@ -23,9 +23,9 @@ public class Clientes extends BaseEntity{
     @Column(name = "id_usuario")
     private int idUsuario;
 
-    @OneToMany(mappedBy = "idCliente",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cliente",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ClienteProducto> clienteProductosList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "idCliente", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Pedidos> pedidosList = new ArrayList<>();
 }

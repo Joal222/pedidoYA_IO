@@ -14,17 +14,20 @@ import lombok.*;
 @Table(name = "pedido_producto")
 public class PedidoProducto extends BaseEntity {
 
-    @Id
+    @EmbeddedId
+    private PedidoProductoId id;
+
     @JsonIgnore
+    @MapsId("idPedido")
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_pedido", referencedColumnName = "idPedido")
-    private Pedidos idPedido;
+    private Pedidos pedido;
 
-    @Id
     @JsonIgnore
+    @MapsId("idProducto")
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_producto", referencedColumnName = "idProducto")
-    private Productos idProducto;
+    private Productos producto;
 
     @Column(name = "cantidad")
     private int cantidad;
