@@ -41,4 +41,7 @@ public class Productos extends BaseEntity {
 
     @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ProveedorProducto> proveedorProductosList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<PedidoProducto> pedidoProductosList = new ArrayList<>();
 }
