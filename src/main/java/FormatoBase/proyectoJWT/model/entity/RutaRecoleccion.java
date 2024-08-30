@@ -1,37 +1,35 @@
 package FormatoBase.proyectoJWT.model.entity;
 
+import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
 @Entity
-@Table(name = "ruta_recoleccion")
-public class RutaRecoleccion {
+public class RutaRecoleccion extends BaseEntity {
 
     @Id
-    @Column(name = "id_recoleccion", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idRecoleccion;
+    @Column(name = "id")
+    private Integer id;
 
-    @Column(name = "id_vehiculo")
-    private Long idVehiculo;
+    @Column(name = "costoActivacion")
+    private float costoActivacion;
 
-    @Column(name = "costo_activacion")
-    private BigDecimal costoActivacion;
+    @OneToMany(mappedBy = "idRutaRecoleccion", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pedido> pedidoList = new ArrayList<>();
 
-    @Column(name = "creado_por", nullable = false)
-    private String creadoPor;
+    @OneToMany(mappedBy = "idRutaRecoleccion", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Empleado> empleadoList = new ArrayList<>();
 
-    @Column(name = "fecha_creacion")
-    private Date fechaCreacion;
-
-    @Column(name = "fecha_modificacion")
-    private Date fechaModificacion;
-
-    @Column(name = "modificado_por", nullable = false)
-    private String modificadoPor;
-
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "idVehiculo",referencedColumnName = "id")
+    private Vehiculo idVehiculo;
 }

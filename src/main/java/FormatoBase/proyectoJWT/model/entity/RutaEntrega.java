@@ -1,41 +1,38 @@
 package FormatoBase.proyectoJWT.model.entity;
 
+import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * $table.getTableComment()
- */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
 @Entity
-@Table(name = "ruta_entrega")
-public class RutaEntrega implements Serializable {
+public class RutaEntrega extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_ruta_entrega", nullable = false)
-    private Long idRutaEntrega;
+    @Column(name = "id")
+    private Integer id;
 
-    @Column(name = "id_vehiculo")
-    private Long idVehiculo;
+    @Column(name = "costoActivacion")
+    private float costoActivacion;
 
-    @Column(name = "costo_activacion")
-    private BigDecimal costoActivacion;
+    @Column(name = "horario")
+    private String horario;
 
-    @Column(name = "creado_por", nullable = false)
-    private String creadoPor;
+    @OneToMany(mappedBy = "idRutaEntrega", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pedido> pedidoList = new ArrayList<>();
 
-    @Column(name = "fecha_creacion")
-    private Date fechaCreacion;
+    @OneToMany(mappedBy = "idRutaEntrega", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Clientes> clientesList = new ArrayList<>();
 
-    @Column(name = "fecha_modificacion")
-    private Date fechaModificacion;
-
-    @Column(name = "modificado_por", nullable = false)
-    private String modificadoPor;
-
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "idVehiculo",referencedColumnName = "id")
+    private Vehiculo idVehiculo;
 }

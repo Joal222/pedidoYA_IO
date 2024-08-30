@@ -1,33 +1,29 @@
 package FormatoBase.proyectoJWT.model.entity;
 
+import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
 @Entity
-@Table(name = "tipo_producto")
-public class TipoProducto {
+public class TipoProducto extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_tipo_producto", nullable = false)
-    private Long idTipoProducto;
+    @Column(name = "id")
+    private Integer id;
 
-    @Column(name = "nombre", nullable = false)
-    private String nombre;
+    @Column(name = "nombre")
+    private Boolean nombre;
 
-    @Column(name = "creado_por", nullable = false)
-    private String creadoPor;
-
-    @Column(name = "fecha_creacion")
-    private Date fechaCreacion;
-
-    @Column(name = "fecha_modificacion")
-    private Date fechaModificacion;
-
-    @Column(name = "modificado_por", nullable = false)
-    private String modificadoPor;
+    @OneToMany(mappedBy = "idTipoProducto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Productos> productosList = new ArrayList<>();
 
 }

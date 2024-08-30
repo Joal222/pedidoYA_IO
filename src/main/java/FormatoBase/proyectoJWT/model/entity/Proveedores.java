@@ -2,32 +2,33 @@ package FormatoBase.proyectoJWT.model.entity;
 
 import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
 @Entity
-@Table(name = "proveedores")
 public class Proveedores extends BaseEntity {
 
     @Id
-    @Column(name = "id_proveedor", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idProveedor;
+    @Column(name = "id")
+    private Integer id;
 
-    @Column(name = "latitud")
-    private String latitud;
+    @Column(name = "ubicacion")
+    private String ubicacion;
 
-    @Column(name = "longitud")
-    private String longitud;
+    @Column(name = "direccion")
+    private String direccion;
 
     @Column(name = "horario_atencion")
-    private String horario_atencion;
+    private String horarioAtencion;
 
-    @OneToMany(mappedBy = "idProveedor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<ProveedorProducto> proveedorProductosList = new ArrayList<>();
+    @OneToMany(mappedBy = "idProveedor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProveedorProducto> proveedorProductoList = new ArrayList<>();
 }
