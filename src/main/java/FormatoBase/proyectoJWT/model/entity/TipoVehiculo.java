@@ -1,33 +1,26 @@
 package FormatoBase.proyectoJWT.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
 @Entity
-@Table(name = "tipo_vehiculo")
 public class TipoVehiculo {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_tipo_vehiculo", nullable = false)
-    private Long idTipoVehiculo;
+    @Column(name = "id")
+    private Integer id;
 
-    @Column(name = "nombre", nullable = false)
+    @Column(name = "nombre")
     private String nombre;
 
-    @Column(name = "creado_por", nullable = false)
-    private String creadoPor;
-
-    @Column(name = "fecha_creacion")
-    private Date fechaCreacion;
-
-    @Column(name = "fecha_modificacion")
-    private Date fechaModificacion;
-
-    @Column(name = "modificado_por", nullable = false)
-    private String modificadoPor;
-
+    @OneToMany(mappedBy = "idTipoVehiculo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Vehiculo> vehiculoList = new ArrayList<>();
 }

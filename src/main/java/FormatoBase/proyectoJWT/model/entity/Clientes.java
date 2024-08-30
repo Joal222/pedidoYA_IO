@@ -13,19 +13,28 @@ import java.util.List;
 @ToString
 @Builder
 @Entity
-@Table(name = "clientes")
-public class Clientes extends BaseEntity{
+public class Clientes extends BaseEntity {
     @Id
-    @Column(name = "id_cliente", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idCliente;
+    @Column(name = "id")
+    private Integer id;
 
-    @Column(name = "id_usuario")
-    private int idUsuario;
+    @Column(name = "telefono")
+    private String telefono;
 
-    @OneToMany(mappedBy = "idCliente",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<ClienteProducto> clienteProductosList = new ArrayList<>();
+    @Column(name = "ubicacion")
+    private String ubicacion;
 
-    @OneToMany(mappedBy = "idCliente", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Pedidos> pedidosList = new ArrayList<>();
+    @Column(name = "direccion")
+    private String direccion;
+
+    @OneToMany(mappedBy = "idClientes", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClienteProducto> clienteProductoList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "idClientes", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pedido> pedidoList = new ArrayList<>();
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_ruta_entrega",referencedColumnName = "id")
+    private RutaEntrega idRutaEntrega;
 }

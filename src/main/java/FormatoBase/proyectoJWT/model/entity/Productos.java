@@ -13,35 +13,44 @@ import java.util.List;
 @ToString
 @Builder
 @Entity
-@Table(name = "productos")
 public class Productos extends BaseEntity {
 
     @Id
-    @Column(name = "id_producto", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idProducto;
+    @Column(name = "id")
+    private Integer id;
 
-    @Column(name = "nombre_producto", nullable = false)
+    @Column(name = "descripcion")
+    private String descripcion;
+
+    @Column(name = "nombre", nullable = false)
     private String nombreProducto;
 
-    @Column(name = "tipo_producto", nullable = false)
-    private String tipoProducto;
+    @Column(name = "dimensionM3")
+    private float dimensionM3;
+
+    @Column(name = "pesoKg")
+    private float pesoKg;
 
     @Column(name = "precio", nullable = false)
     private float precio;
 
-    @Column(name = "cantidad_disponible")
-    private int cantidadDisponible;
+    @Column(name = "tipo_producto", nullable = false)
+    private String tipoProducto;
 
     @Column(name = "url")
     private String url;
 
-    @OneToMany(mappedBy = "idProducto",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<ClienteProducto> clienteProductosList = new ArrayList<>();
+    @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProveedorProducto> proveedorProductoList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<ProveedorProducto> proveedorProductosList = new ArrayList<>();
+    @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClienteProducto> clienteProductoList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<PedidoProducto> pedidoProductosList = new ArrayList<>();
+    @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PedidoProducto> pedidoProductoList = new ArrayList<>();
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "idTipoProducto",referencedColumnName = "id")
+    private TipoProducto idTipoProducto;
 }

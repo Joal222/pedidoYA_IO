@@ -13,15 +13,15 @@ import java.util.List;
 @ToString
 @Builder
 @Entity
-public class Puesto extends BaseEntity {
+public class Estado extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "descripcion")
-    private String descripcion;
+    @Column(name = "nombre")
+    private String nombreProducto;
 
-    @OneToMany(mappedBy = "idPuesto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Empleado> empleadoList = new ArrayList<>();
+    @OneToMany(mappedBy = "idEstado", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pedido> pedidoListd = new ArrayList<>();
 }

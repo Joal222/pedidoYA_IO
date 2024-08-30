@@ -1,7 +1,11 @@
 package FormatoBase.proyectoJWT.model.entity.AuthAndRegister;
 
+import FormatoBase.proyectoJWT.model.entity.RutaEntrega;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -22,6 +26,6 @@ public class Rol extends BaseEntity {
     @Column(name = "descripcion")
     private String descripcion;
 
-    /*@OneToMany(mappedBy = "rolId",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Users> usersList = new ArrayList<>();*/
+    /*@OneToMany(mappedBy = "idRol",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Rol> rolList = new ArrayList<>();*/
 }
