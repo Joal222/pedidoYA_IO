@@ -21,9 +21,9 @@ public class TipoProducto extends BaseEntity {
     private Integer id;
 
     @Column(name = "nombre")
-    private Boolean nombre;
+    private String nombre;
 
-    @OneToMany(mappedBy = "idTipoProducto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "idTipoProducto", cascade = CascadeType.ALL)
     private List<Productos> productosList = new ArrayList<>();
 
 }

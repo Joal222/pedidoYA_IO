@@ -2,6 +2,7 @@ package FormatoBase.proyectoJWT.model.entity;
 
 import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -19,15 +20,19 @@ public class Pedido extends BaseEntity {
     @Column(name = "id")
     private Integer id;
 
+    @NotNull
     @Column(name = "direccionEntrega")
     private String direccionEntrega;
 
+    @NotNull
     @Column(name = "direccionRecepcion")
     private String direccionRecepcion;
 
+    @NotNull
     @Column(name = "ubicacionEntrega")
     private String ubicacionEntrega;
 
+    @NotNull
     @Column(name = "ubicacionRecepcion")
     private String ubicacionRecepcion;
 
