@@ -26,6 +26,6 @@ public class Rol extends BaseEntity {
     @Column(name = "descripcion")
     private String descripcion;
 
-    /*@OneToMany(mappedBy = "idRol",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Rol> rolList = new ArrayList<>();*/
+    @OneToMany(mappedBy = "idRol",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<User> userList = new ArrayList<>();
 }
