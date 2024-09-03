@@ -3,6 +3,7 @@ package FormatoBase.proyectoJWT.model.entity.AuthAndRegister;
 import FormatoBase.proyectoJWT.model.entity.Empleado;
 import FormatoBase.proyectoJWT.model.entity.RutaEntrega;
 import FormatoBase.proyectoJWT.model.entity.Vehiculo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -27,6 +28,11 @@ public class User  extends BaseEntity implements UserDetails{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
+
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_rol",referencedColumnName = "id")
+    private Rol idRol;
 
     @Size(max = 255)
     @Column(name = "first_name")
@@ -87,7 +93,4 @@ public class User  extends BaseEntity implements UserDetails{
     @OneToMany(mappedBy = "idUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Empleado> empleadoList = new ArrayList<>();
 
-    /*@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_rol",referencedColumnName = "id")
-    private Rol idRol;*/
 }

@@ -1,5 +1,6 @@
 package FormatoBase.proyectoJWT.model.entity;
 
+import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @ToString
 @Builder
 @Entity
-public class TipoVehiculo {
+public class TipoVehiculo extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
