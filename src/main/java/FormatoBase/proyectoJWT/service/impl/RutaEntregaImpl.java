@@ -36,13 +36,13 @@ public class RutaEntregaImpl implements CrudServiceProcessingController<RutaEntr
     @Transactional(readOnly = true)
     @Override
     public List<RutaEntrega> findAll() {
-        return null;
+        return rutaEntregaRepo.findAll();
     }
 
     @Transactional
     @Override
-    public RutaEntrega findByNombre(String rutaEntrega) {
-        return null;
+    public RutaEntrega findByNombre(String nombre) {
+        return rutaEntregaRepo.findByNombre(nombre).orElse(null);
     }
 
     @Transactional

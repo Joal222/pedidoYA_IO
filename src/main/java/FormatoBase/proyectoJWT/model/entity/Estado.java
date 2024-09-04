@@ -20,8 +20,8 @@ public class Estado extends BaseEntity{
     private Integer id;
 
     @Column(name = "nombre")
-    private String nombreProducto;
+    private String nombre;
 
-    @OneToMany(mappedBy = "idEstado", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "idEstado", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Pedido> pedidoListd = new ArrayList<>();
 }

@@ -26,13 +26,16 @@ public class RutaEntrega extends BaseEntity {
     @Column(name = "horario")
     private String horario;
 
-    @OneToMany(mappedBy = "idRutaEntrega", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "nombre")
+    private String nombre;
+
+    @OneToMany(mappedBy = "idRutaEntrega", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Pedido> pedidoList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "idRutaEntrega", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "idRutaEntrega", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Clientes> clientesList = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "idVehiculo",referencedColumnName = "id")
     private Vehiculo idVehiculo;
 }

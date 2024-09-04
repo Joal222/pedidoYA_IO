@@ -41,16 +41,16 @@ public class Productos extends BaseEntity {
     @Column(name = "url")
     private String url;
 
-    @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProveedorProducto> proveedorProductoList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ClienteProducto> clienteProductoList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "idProducto", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PedidoProducto> pedidoProductoList = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "idTipoProducto",referencedColumnName = "id")
     private TipoProducto idTipoProducto;
 }

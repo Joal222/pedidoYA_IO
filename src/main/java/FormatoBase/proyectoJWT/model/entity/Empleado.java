@@ -34,7 +34,7 @@ public class Empleado extends BaseEntity {
     @JoinColumn(name = "id_puesto",referencedColumnName = "id")
     private Puesto idPuesto;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user",referencedColumnName = "id")
     private User idUser;
 
