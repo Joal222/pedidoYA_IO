@@ -28,10 +28,10 @@ public class Clientes extends BaseEntity {
     @Column(name = "direccion")
     private String direccion;
 
-    @OneToMany(mappedBy = "idClientes", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "idClientes", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<ClienteProducto> clienteProductoList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "idClientes", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "idClientes", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Pedido> pedidoList = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

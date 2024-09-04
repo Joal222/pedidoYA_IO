@@ -36,14 +36,14 @@ public class Pedido extends BaseEntity {
     @Column(name = "ubicacionRecepcion")
     private String ubicacionRecepcion;
 
-    @OneToMany(mappedBy = "idPedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "idPedido", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PedidoProducto> pedidoProductoList = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "idEstado",referencedColumnName = "id")
     private Estado idEstado;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente",referencedColumnName = "id")
     private Clientes idClientes;
 

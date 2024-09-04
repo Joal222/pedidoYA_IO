@@ -29,6 +29,6 @@ public class Proveedores extends BaseEntity {
     @Column(name = "horario_atencion")
     private String horarioAtencion;
 
-    @OneToMany(mappedBy = "idProveedor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "idProveedor", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProveedorProducto> proveedorProductoList = new ArrayList<>();
 }
