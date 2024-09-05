@@ -47,7 +47,7 @@ public class VehiculoImpl implements CrudServiceProcessingController<Vehiculo, I
 
     @Transactional
     @Override
-    public void delete(Vehiculo entity) {
-
+    public void delete(Vehiculo vehiculo) {
+        vehiculoRepository.delete(vehiculo);
     }
 }

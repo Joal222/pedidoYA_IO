@@ -1,6 +1,7 @@
 package FormatoBase.proyectoJWT.model.entity;
 
 import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,10 +21,12 @@ public class ProveedorProducto extends BaseEntity {
     @Column(name = "disponibilidad")
     private Boolean disponibilidad;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_proveedor",referencedColumnName = "id")
     private Proveedores idProveedor;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_producto",referencedColumnName = "id")
     private Productos idProducto;

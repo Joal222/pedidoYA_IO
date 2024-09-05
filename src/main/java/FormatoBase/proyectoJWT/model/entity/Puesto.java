@@ -22,6 +22,6 @@ public class Puesto extends BaseEntity {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @OneToMany(mappedBy = "idPuesto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "idPuesto", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Empleado> empleadoList = new ArrayList<>();
 }

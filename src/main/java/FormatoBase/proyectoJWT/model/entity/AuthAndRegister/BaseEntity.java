@@ -21,10 +21,10 @@ public class BaseEntity implements Serializable {
     @Column(name = "fecha_modificacion", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime fechaModificacion;
 
-    @Column(name = "creado_por", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'Sistema'")
+    @Column(name = "usuario_creacion", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'Sistema'")
     private String creadoPor;
 
-    @Column(name = "modificado_por", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'Sistema'")
+    @Column(name = "usuario_modifica", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'Sistema'")
     private String modificadoPor;
 
     @PrePersist

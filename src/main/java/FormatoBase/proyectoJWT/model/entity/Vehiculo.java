@@ -31,13 +31,13 @@ public class Vehiculo extends BaseEntity {
     @Column(name = "ubicacion")
     private String ubicacion;
 
-    @OneToMany(mappedBy = "idVehiculo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "idVehiculo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<RutaEntrega> rutaEntregaList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "idVehiculo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "idVehiculo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<RutaRecoleccion> rutaRecoleccionList = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_tipo_vehiculo",referencedColumnName = "id")
     private TipoVehiculo idTipoVehiculo;
 }
