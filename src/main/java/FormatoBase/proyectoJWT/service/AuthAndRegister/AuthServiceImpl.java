@@ -29,7 +29,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;//Interfaz propia de Spring Security
     private static final Pattern PASSWORD_PATTERN =
-            Pattern.compile("^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,}$");
+            Pattern.compile("^(?=.*[0-9])(?=.*[A-Z])(?=.[!@#$%^&()-+=.,])(?=\\S+$).{6,}$");
 
     private void validatePassword(String password) {
         if (!PASSWORD_PATTERN.matcher(password).matches()) {
