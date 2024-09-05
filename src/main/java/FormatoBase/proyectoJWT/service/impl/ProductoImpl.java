@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class ProductoImpl implements CrudServiceProcessingController<Productos,Integer> {
+public class  ProductoImpl implements CrudServiceProcessingController<Productos,Integer> {
 
 
     @Autowired
