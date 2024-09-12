@@ -44,12 +44,6 @@ public class ClienteProductoImpl implements CrudServiceProcessingController<Clie
 
     @Transactional
     @Override
-    public ClienteProducto findByNombre(String nombre) {
-        return null;
-    }
-
-    @Transactional
-    @Override
     public void delete(ClienteProducto clienteProducto) {
          clienteProductoRepo.delete(clienteProducto);
     }

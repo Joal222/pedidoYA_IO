@@ -41,12 +41,6 @@ public class EstadoImpl implements CrudServiceProcessingController<Estado, Integ
 
     @Transactional
     @Override
-    public Estado findByNombre(String nombre) {
-        return estadoRepo.findByNombre(nombre).orElse(null);
-    }
-
-    @Transactional
-    @Override
     public void delete(Estado estado) {
         estadoRepo.delete(estado);
     }

@@ -3,6 +3,7 @@ package FormatoBase.proyectoJWT.model.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
@@ -10,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PedidoDto {
+public class PedidoDto implements Serializable {
 
     private Integer id;
 
