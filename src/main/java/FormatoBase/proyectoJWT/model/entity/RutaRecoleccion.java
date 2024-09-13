@@ -30,9 +30,6 @@ public class RutaRecoleccion extends BaseEntity {
     private Vehiculo idVehiculo;
 
     @OneToMany(mappedBy = "idRutaRecoleccion", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Pedido> pedidoList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "idRutaRecoleccion", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Empleado> empleadoList = new ArrayList<>();
 
     @OneToMany(mappedBy = "idRutaRecoleccion", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

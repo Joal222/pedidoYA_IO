@@ -19,10 +19,10 @@ public class Tablon extends BaseEntity {
     @Column(name = "id")
     private Integer id;
 
-    @JsonIgnore
+    /*@JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente",referencedColumnName = "id")
-    private Clientes idClientes;
+    private Clientes idClientes;*/
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

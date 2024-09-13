@@ -21,26 +21,17 @@ public class Pedido extends BaseEntity {
     @Column(name = "id")
     private Integer id;
 
-    @NotNull
     @Column(name = "direccionEntrega")
     private String direccionEntrega;
 
-    @NotNull
     @Column(name = "direccionRecepcion")
     private String direccionRecepcion;
 
-    @NotNull
-    @Column(name = "ubicacionEntrega")
-    private String ubicacionEntrega;
+    @Column(name = "latitud")
+    private String latitud;
 
-    @NotNull
-    @Column(name = "ubicacionRecepcion")
-    private String ubicacionRecepcion;
-
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "idEstado",referencedColumnName = "id")
-    private Estado idEstado;
+    @Column(name = "longitud")
+    private String longitud;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -48,18 +39,21 @@ public class Pedido extends BaseEntity {
     private Clientes idClientes;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_ruta_entrega",referencedColumnName = "id")
-    private RutaEntrega idRutaEntrega;
-
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_ruta_recoleccion",referencedColumnName = "id")
-    private RutaRecoleccion idRutaRecoleccion;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "idEstado",referencedColumnName = "id")
+    private Estado idEstado;
 
     @OneToMany(mappedBy = "idPedido", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PedidoProducto> pedidoProductoList = new ArrayList<>();
 
     @OneToMany(mappedBy = "idPedido", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Tablon> tablonList = new ArrayList<>();
+
+    /*@NotNull
+    @Column(name = "ubicacionEntrega")
+    private String ubicacionEntrega;*/
+
+    /*@NotNull
+    @Column(name = "ubicacionRecepcion")
+    private String ubicacionRecepcion; */
 }

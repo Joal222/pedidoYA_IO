@@ -48,6 +48,7 @@ public class PedidoController {
                 .collect(Collectors.toList());
         return new ResponseEntity<>(pedidoDtos, HttpStatus.OK);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<PedidoDto> getPedidoById(@PathVariable Integer id){
         Pedido pedido = pedidoService.findById(id);
@@ -57,17 +58,15 @@ public class PedidoController {
         PedidoDto pedidoDto = convertToDto(pedido);
         return new ResponseEntity<>(pedidoDto,HttpStatus.OK);
     }
+
     private PedidoDto convertToDto(Pedido pedido) {
         return PedidoDto.builder()
                 .id(pedido.getId())
                 .idClientes(pedido.getIdClientes().getId())
                 .direccionEntrega(pedido.getDireccionEntrega())
                 .direccionRecepcion(pedido.getDireccionRecepcion())
-                .ubicacionEntrega(pedido.getUbicacionEntrega())
-                .ubicacionRecepcion(pedido.getUbicacionRecepcion())
-                .idEstado(pedido.getIdEstado().getId())
-                .idRutaEntrega(pedido.getIdRutaEntrega().getId())
-                .idRutaRecoleccion(pedido.getIdRutaRecoleccion().getId())
+                //.ubicacionEntrega(pedido.getUbicacionEntrega())
+                //.ubicacionRecepcion(pedido.getUbicacionRecepcion())
                 .pedidoProductoList(pedido.getPedidoProductoList() != null ?
                         pedido.getPedidoProductoList().stream()
                                 .map(pedidoProducto -> PedidoProductoDto.builder()
@@ -90,17 +89,11 @@ public class PedidoController {
 
             // Asignar el cliente al pedido
             pedido.setIdClientes(clientesService.findById(pedidoDto.getIdClientes()));
-
-            // Asignar el estado, ruta de entrega y ruta de recolección
-            pedido.setIdEstado(estadoService.findById(pedidoDto.getIdEstado()));
-            pedido.setIdRutaEntrega(rutaEntregaService.findById(pedidoDto.getIdRutaEntrega()));
-            pedido.setIdRutaRecoleccion(rutaRecoleccionService.findById(pedidoDto.getIdRutaRecoleccion()));
-
             // Asignar direcciones y ubicaciones
             pedido.setDireccionEntrega(pedidoDto.getDireccionEntrega());
             pedido.setDireccionRecepcion(pedidoDto.getDireccionRecepcion());
-            pedido.setUbicacionEntrega(pedidoDto.getUbicacionEntrega());
-            pedido.setUbicacionRecepcion(pedidoDto.getUbicacionRecepcion());
+            pedido.setLatitud(pedidoDto.getLatitud());
+            pedido.setLongitud(pedidoDto.getLongitud());
 
             // Asignar los productos relacionados
             if (pedidoDto.getPedidoProductoList() != null) {

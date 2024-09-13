@@ -24,16 +24,8 @@ public class Clientes extends BaseEntity {
     @Column(name = "telefono")
     private String telefono;
 
-    @Column(name = "ubicacion")
-    private String ubicacion;
-
-    @Column(name = "direccion")
-    private String direccion;
-
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_ruta_entrega",referencedColumnName = "id")
-    private RutaEntrega idRutaEntrega;
+    @Column(name = "telefono_emergencia")
+    private String telefonoEmergencia;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -46,6 +38,19 @@ public class Clientes extends BaseEntity {
     @OneToMany(mappedBy = "idClientes", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Pedido> pedidoList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "idClientes", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
-    private List<Tablon> tablonList = new ArrayList<>();
+    /*@OneToMany(mappedBy = "idClientes", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
+    private List<Tablon> tablonList = new ArrayList<>();*/
+
+    /*
+    @Column(name = "ubicacion")
+    private String ubicacion;
+
+    @Column(name = "direccion")
+    private String direccion;
+
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_ruta_entrega",referencedColumnName = "id")
+    private RutaEntrega idRutaEntrega;
+     */
 }

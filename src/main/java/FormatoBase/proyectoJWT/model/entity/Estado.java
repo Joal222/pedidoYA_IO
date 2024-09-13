@@ -23,5 +23,5 @@ public class Estado extends BaseEntity{
     private String nombre;
 
     @OneToMany(mappedBy = "idEstado", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Pedido> pedidoListd = new ArrayList<>();
+    private List<Pedido> pedidoList = new ArrayList<>();
 }
