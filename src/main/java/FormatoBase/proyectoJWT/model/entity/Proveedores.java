@@ -20,8 +20,11 @@ public class Proveedores extends BaseEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "ubicacion")
-    private String ubicacion;
+    @Column(name = "latitud")
+    private Double latitud;
+
+    @Column(name = "longitud")
+    private Double longitud;
 
     @Column(name = "direccion")
     private String direccion;

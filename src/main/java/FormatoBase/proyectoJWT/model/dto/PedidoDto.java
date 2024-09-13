@@ -25,16 +25,10 @@ public class PedidoDto implements Serializable {
     private String direccionRecepcion;
 
     @NotNull
-    private String ubicacionEntrega;
+    private String latitud;
 
     @NotNull
-    private String ubicacionRecepcion;
-
-    private Integer idEstado;
-
-    private Integer idRutaEntrega;
-
-    private Integer idRutaRecoleccion;
+    private String longitud;
 
     private List<PedidoProductoDto> pedidoProductoList;
 }
