@@ -2,6 +2,7 @@ package FormatoBase.proyectoJWT.model.entity;
 
 import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
 import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,17 +27,18 @@ public class Empleado extends BaseEntity {
     @Column(name = "telefono")
     private String telefono;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_ruta_recoleccion",referencedColumnName = "id")
     private RutaRecoleccion idRutaRecoleccion;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_puesto",referencedColumnName = "id")
     private Puesto idPuesto;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user",referencedColumnName = "id")
     private User idUser;
-
-
 }

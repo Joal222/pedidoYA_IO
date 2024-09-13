@@ -41,11 +41,6 @@ public class RolImpl implements CrudServiceProcessingController<Rol, Integer>{
         return (List<Rol>) rolDao.findAll();
     }
 
-    @Override
-    public Rol findByNombre(String nombre) {
-        return null;
-    }
-
     @Transactional
     @Override
     public void delete(Rol puesto) {

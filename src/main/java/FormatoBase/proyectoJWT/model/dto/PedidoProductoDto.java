@@ -2,12 +2,14 @@ package FormatoBase.proyectoJWT.model.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @Data
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PedidoProductoDto {
+public class PedidoProductoDto implements Serializable {
     private Integer id;
     private Integer idProducto;
     private Integer cantidad;

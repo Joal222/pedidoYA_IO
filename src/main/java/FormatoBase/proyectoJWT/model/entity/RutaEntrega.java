@@ -1,6 +1,7 @@
 package FormatoBase.proyectoJWT.model.entity;
 
 import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,14 +21,16 @@ public class RutaEntrega extends BaseEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "costoActivacion")
-    private float costoActivacion;
-
     @Column(name = "horario")
     private String horario;
 
     @Column(name = "nombre")
     private String nombre;
+
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "idVehiculo",referencedColumnName = "id")
+    private Vehiculo idVehiculo;
 
     @OneToMany(mappedBy = "idRutaEntrega", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Pedido> pedidoList = new ArrayList<>();
@@ -35,7 +38,6 @@ public class RutaEntrega extends BaseEntity {
     @OneToMany(mappedBy = "idRutaEntrega", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Clientes> clientesList = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "idVehiculo",referencedColumnName = "id")
-    private Vehiculo idVehiculo;
+    @OneToMany(mappedBy = "idRutaEntrega", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Tablon> tablonList = new ArrayList<>();
 }

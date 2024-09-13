@@ -7,6 +7,5 @@ public interface CrudServiceProcessingController<T,ID>{
     T update(T entity);
     T findById(ID id);
     List<T> findAll();
-    T findByNombre(String nombre);
     void delete(T entity);
 }

@@ -41,12 +41,6 @@ public class TipoProductoImpl implements CrudServiceProcessingController<TipoPro
 
     @Transactional
     @Override
-    public TipoProducto findByNombre(String tipoProducto) {
-        return null;
-    }
-
-    @Transactional
-    @Override
     public void delete(TipoProducto tipoProducto) {
         tipoProductoRepo.delete(tipoProducto);
     }

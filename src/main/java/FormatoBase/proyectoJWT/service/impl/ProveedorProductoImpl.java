@@ -39,12 +39,6 @@ public class ProveedorProductoImpl implements CrudServiceProcessingController<Pr
         return null;
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public ProveedorProducto findByNombre(String proveedorProducto) {
-        return null;
-    }
-
     @Transactional
     @Override
     public void delete(ProveedorProducto proveedorProducto) {

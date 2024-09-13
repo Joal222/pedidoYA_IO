@@ -1,5 +1,6 @@
 package FormatoBase.proyectoJWT.model.entity.AuthAndRegister;
 
+import FormatoBase.proyectoJWT.model.entity.Clientes;
 import FormatoBase.proyectoJWT.model.entity.Empleado;
 import FormatoBase.proyectoJWT.model.entity.RutaEntrega;
 import FormatoBase.proyectoJWT.model.entity.Vehiculo;
@@ -92,5 +93,8 @@ public class User  extends BaseEntity implements UserDetails{
 
     @OneToMany(mappedBy = "idUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Empleado> empleadoList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "idUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Clientes> clientesList = new ArrayList<>();
 
 }

@@ -42,12 +42,6 @@ public class TipoVehiculoImpl implements CrudServiceProcessingController<TipoVeh
 
     @Transactional
     @Override
-    public TipoVehiculo findByNombre(String tipoVehiculo) {
-        return null;
-    }
-
-    @Transactional
-    @Override
     public void delete(TipoVehiculo tipoVehiculo) {
         tipoVehiculoRepo.delete(tipoVehiculo);
 

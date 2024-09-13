@@ -41,12 +41,6 @@ public class PuestoImpl implements CrudServiceProcessingController<Puesto, Integ
 
     @Transactional
     @Override
-    public Puesto findByNombre(String puesto) {
-        return null;
-    }
-
-    @Transactional
-    @Override
     public void delete(Puesto puesto) {
         puestoRepo.delete(puesto);
     }
