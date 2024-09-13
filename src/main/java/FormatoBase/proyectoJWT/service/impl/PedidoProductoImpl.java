@@ -41,12 +41,6 @@ public class PedidoProductoImpl implements CrudServiceProcessingController<Pedid
 
     @Transactional
     @Override
-    public PedidoProducto findByNombre(String nombre) {
-        return null;
-    }
-
-    @Transactional
-    @Override
     public void delete(PedidoProducto pedidoProducto) {
         pedidoProductoRepo.delete(pedidoProducto);
     }

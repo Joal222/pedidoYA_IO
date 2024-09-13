@@ -3,6 +3,7 @@ package FormatoBase.proyectoJWT.model.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
@@ -10,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PedidoDto {
+public class PedidoDto implements Serializable {
 
     private Integer id;
 
@@ -24,16 +25,10 @@ public class PedidoDto {
     private String direccionRecepcion;
 
     @NotNull
-    private String ubicacionEntrega;
+    private String latitud;
 
     @NotNull
-    private String ubicacionRecepcion;
-
-    private Integer idEstado;
-
-    private Integer idRutaEntrega;
-
-    private Integer idRutaRecoleccion;
+    private String longitud;
 
     private List<PedidoProductoDto> pedidoProductoList;
 }

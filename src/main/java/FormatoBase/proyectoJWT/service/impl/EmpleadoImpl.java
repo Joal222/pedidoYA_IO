@@ -39,12 +39,6 @@ public class EmpleadoImpl implements CrudServiceProcessingController<Empleado, I
 
     @Transactional
     @Override
-    public Empleado findByNombre(String nombre) {
-        return null;
-    }
-
-    @Transactional
-    @Override
     public void delete(Empleado empleado) {
         empleadoRepo.delete(empleado);
     }

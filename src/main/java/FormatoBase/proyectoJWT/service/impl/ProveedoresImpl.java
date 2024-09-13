@@ -40,12 +40,6 @@ public class ProveedoresImpl implements CrudServiceProcessingController<Proveedo
 
     @Transactional
     @Override
-    public Proveedores findByNombre(String proveedores) {
-        return null;
-    }
-
-    @Transactional
-    @Override
     public void delete(Proveedores proveedores) {
         proveedoresRepo.delete(proveedores);
     }

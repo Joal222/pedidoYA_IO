@@ -1,6 +1,7 @@
 package FormatoBase.proyectoJWT.model.entity;
 
 import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,20 +21,17 @@ public class RutaRecoleccion extends BaseEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "costoActivacion")
-    private float costoActivacion;
-
     @Column(name = "nombre")
     private String nombre;
 
-
-    @OneToMany(mappedBy = "idRutaRecoleccion", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Pedido> pedidoList = new ArrayList<>();
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "idVehiculo",referencedColumnName = "id")
+    private Vehiculo idVehiculo;
 
     @OneToMany(mappedBy = "idRutaRecoleccion", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Empleado> empleadoList = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "idVehiculo",referencedColumnName = "id")
-    private Vehiculo idVehiculo;
+    @OneToMany(mappedBy = "idRutaRecoleccion", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Tablon> tablonList = new ArrayList<>();
 }

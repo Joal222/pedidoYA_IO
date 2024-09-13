@@ -1,6 +1,7 @@
 package FormatoBase.proyectoJWT.model.entity;
 
 import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -20,38 +21,39 @@ public class Pedido extends BaseEntity {
     @Column(name = "id")
     private Integer id;
 
-    @NotNull
     @Column(name = "direccionEntrega")
     private String direccionEntrega;
 
-    @NotNull
     @Column(name = "direccionRecepcion")
     private String direccionRecepcion;
 
-    @NotNull
-    @Column(name = "ubicacionEntrega")
-    private String ubicacionEntrega;
+    @Column(name = "latitud")
+    private String latitud;
 
-    @NotNull
-    @Column(name = "ubicacionRecepcion")
-    private String ubicacionRecepcion;
+    @Column(name = "longitud")
+    private String longitud;
 
-    @OneToMany(mappedBy = "idPedido", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<PedidoProducto> pedidoProductoList = new ArrayList<>();
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "idEstado",referencedColumnName = "id")
-    private Estado idEstado;
-
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente",referencedColumnName = "id")
     private Clientes idClientes;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_ruta_entrega",referencedColumnName = "id")
-    private RutaEntrega idRutaEntrega;
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "idEstado",referencedColumnName = "id")
+    private Estado idEstado;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_ruta_recoleccion",referencedColumnName = "id")
-    private RutaRecoleccion idRutaRecoleccion;
+    @OneToMany(mappedBy = "idPedido", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<PedidoProducto> pedidoProductoList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "idPedido", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Tablon> tablonList = new ArrayList<>();
+
+    /*@NotNull
+    @Column(name = "ubicacionEntrega")
+    private String ubicacionEntrega;*/
+
+    /*@NotNull
+    @Column(name = "ubicacionRecepcion")
+    private String ubicacionRecepcion; */
 }

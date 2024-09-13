@@ -42,12 +42,6 @@ public class RutaRecoleccionImpl implements CrudServiceProcessingController<Ruta
 
     @Transactional
     @Override
-    public RutaRecoleccion findByNombre(String nombre) {
-        return rutaRecoleccionRepo.findByNombre(nombre).orElse(null);
-    }
-
-    @Transactional
-    @Override
     public void delete(RutaRecoleccion rutaRecoleccion) {
         rutaRecoleccionRepo.delete(rutaRecoleccion);
     }
