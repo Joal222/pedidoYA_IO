@@ -42,12 +42,6 @@ public class  ProductoImpl implements CrudServiceProcessingController<Productos,
 
     @Transactional
     @Override
-    public Productos findByNombre(String productos) {
-        return null;
-    }
-
-    @Transactional
-    @Override
     public void delete(Productos productos) {
         productosRepo.delete(productos);
     }

@@ -24,9 +24,6 @@ public class Pedido extends BaseEntity {
     @Column(name = "direccionEntrega")
     private String direccionEntrega;
 
-    @Column(name = "direccionRecepcion")
-    private String direccionRecepcion;
-
     @Column(name = "latitud")
     private String latitud;
 

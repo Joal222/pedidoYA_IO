@@ -64,17 +64,15 @@ public class PedidoController {
                 .id(pedido.getId())
                 .idClientes(pedido.getIdClientes().getId())
                 .direccionEntrega(pedido.getDireccionEntrega())
-                .direccionRecepcion(pedido.getDireccionRecepcion())
-                //.ubicacionEntrega(pedido.getUbicacionEntrega())
-                //.ubicacionRecepcion(pedido.getUbicacionRecepcion())
+                .latitud(pedido.getLatitud())
+                .longitud(pedido.getLongitud())
+                .fechaCreacion(pedido.getFechaCreacion())
                 .pedidoProductoList(pedido.getPedidoProductoList() != null ?
                         pedido.getPedidoProductoList().stream()
                                 .map(pedidoProducto -> PedidoProductoDto.builder()
                                         .id(pedidoProducto.getId())
                                         .idProducto(pedidoProducto.getIdProducto().getId())
                                         .cantidad(pedidoProducto.getCantidad())
-                                        .nombreProducto(pedidoProducto.getIdProducto().getNombreProducto()) // Obtener nombre del producto
-                                        .urlImagen(pedidoProducto.getIdProducto().getUrl()) // Obtener la URL de la imagen del producto
                                         .build())
                                 .collect(Collectors.toList())
                         : null)
@@ -89,9 +87,10 @@ public class PedidoController {
 
             // Asignar el cliente al pedido
             pedido.setIdClientes(clientesService.findById(pedidoDto.getIdClientes()));
+            pedido.setIdEstado(estadoService.findById(pedidoDto.getIdEstado()));
+
             // Asignar direcciones y ubicaciones
             pedido.setDireccionEntrega(pedidoDto.getDireccionEntrega());
-            pedido.setDireccionRecepcion(pedidoDto.getDireccionRecepcion());
             pedido.setLatitud(pedidoDto.getLatitud());
             pedido.setLongitud(pedidoDto.getLongitud());
 
