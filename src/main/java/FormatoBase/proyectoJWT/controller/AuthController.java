@@ -22,13 +22,13 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @CrossOrigin(origins = "https://sistema-aeropuerto.onrender.com")
+    @CrossOrigin(origins = "*")
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 
-    @CrossOrigin(origins = "https://sistema-aeropuerto.onrender.com")
+    @CrossOrigin(origins = "*")
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
         try {
