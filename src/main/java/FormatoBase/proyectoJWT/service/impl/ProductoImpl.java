@@ -37,7 +37,13 @@ public class  ProductoImpl implements CrudServiceProcessingController<Productos,
     @Transactional(readOnly = true)
     @Override
     public List<Productos> findAll() {
-        return (List<Productos>)productosRepo.findAll();
+        return (List<Productos>) productosRepo.findAll();
+    }
+
+    @Transactional
+    @Override
+    public Productos findByNombre(String productos) {
+        return null;
     }
 
     @Transactional
