@@ -36,9 +36,6 @@ public class Productos extends BaseEntity {
     @Column(name = "precio", nullable = false)
     private float precio;
 
-    @Column(name = "tipo_producto", nullable = false)
-    private String tipoProducto;
-
     @Column(name = "url")
     private String url;
 
