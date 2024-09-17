@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PedidoDto implements Serializable {
-    @NotNull
+   
     private Integer id;
 
     @NotNull(message = "El ID del cliente no puede ser nulo")
