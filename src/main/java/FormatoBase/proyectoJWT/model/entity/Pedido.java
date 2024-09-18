@@ -21,6 +21,12 @@ public class Pedido extends BaseEntity {
     @Column(name = "id")
     private Integer id;
 
+    @Column(name = "clientePedido")
+    private String clientePedido;
+
+    @Column(name = "telefonoPedido")
+    private String telefonoPedido;
+
     @Column(name = "direccionEntrega")
     private String direccionEntrega;
 
