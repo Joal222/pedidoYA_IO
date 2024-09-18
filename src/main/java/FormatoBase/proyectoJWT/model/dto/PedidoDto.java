@@ -23,6 +23,12 @@ public class PedidoDto implements Serializable {
     @NotNull(message = "El ID del estado no puede ser nulo")
     private Integer idEstado;
 
+    @NotNull(message = "El nombre del Cliente no puede ser nulo")
+    private String clientePedido;
+
+    @NotNull(message = "El telefono del Cliente no puede ser nulo")
+    private String telefonoPedido;
+
     private LocalDateTime fechaCreacion;
 
     @NotNull(message = "La dirección de entrega no puede ser nula")

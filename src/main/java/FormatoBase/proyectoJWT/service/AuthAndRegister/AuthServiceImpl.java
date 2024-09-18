@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @Service
@@ -29,12 +30,13 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;//Interfaz propia de Spring Security
     private static final Pattern PASSWORD_PATTERN =
-            Pattern.compile("^(?=.[0-9])(?=.[A-Z])(?=.*[!@#$%^&()-+=.,])(?=\\S+$).{6,}$");
+            Pattern.compile("^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&()-+=.,])(?=\\S+$).{6,}$");
+
 
     private void validatePassword(String password) {
         if (!PASSWORD_PATTERN.matcher(password).matches()) {
             throw new InvalidPasswordFormatException(
-                    "Formato de contraseña inválido: Mínimo de 9 caracteres, debe incluir al menos una letra mayúscula, un carácter especial y un número");
+                    "Formato de contraseña inválido: Mínimo de 6 caracteres, debe incluir al menos una letra mayúscula, un carácter especial y un número");
         }
     }
 
@@ -52,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
                 .role(Role.USER)//Por default se coloco USER = usuario normal, modificar lógica según requerimiento.
                 .build();
         userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);//Siempre a base de userDetails
+        var jwtToken = jwtService.generateToken(Map.of("id", user.getId()), user);//Siempre a base de userDetails
         return AuthResponse.builder()
                 .token(jwtToken)
                 .build();
@@ -75,7 +77,7 @@ public class AuthServiceImpl implements AuthService {
                 throw new CustomAuthenticationException("Contraseña incorrecta");
             }
 
-            var jwtToken = jwtService.generateToken(user);
+            var jwtToken = jwtService.generateToken(Map.of("id", user.getId()), user);
             return AuthResponse.builder()
                     .token(jwtToken)
                     .build();

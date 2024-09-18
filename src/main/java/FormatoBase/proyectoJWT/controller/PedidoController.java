@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -26,11 +27,6 @@ public class PedidoController {
     @Autowired
     private CrudServiceProcessingController<Estado, Integer> estadoService;
 
-    @Autowired
-    private CrudServiceProcessingController<RutaEntrega, Integer> rutaEntregaService;
-
-    @Autowired
-    private CrudServiceProcessingController<RutaRecoleccion, Integer> rutaRecoleccionService;
 
     @Autowired
     private CrudServiceProcessingController<Productos, Integer> productoService;
@@ -63,6 +59,9 @@ public class PedidoController {
         return PedidoDto.builder()
                 .id(pedido.getId())
                 .idClientes(pedido.getIdClientes().getId())
+                .idEstado(pedido.getIdEstado().getId())
+                .clientePedido(pedido.getClientePedido())
+                .telefonoPedido(pedido.getTelefonoPedido())
                 .direccionEntrega(pedido.getDireccionEntrega())
                 .latitud(pedido.getLatitud())
                 .longitud(pedido.getLongitud())
@@ -79,14 +78,19 @@ public class PedidoController {
                 .build();
     }
 
+
     @PostMapping
     public ResponseEntity<?> crearPedido(@Valid @RequestBody PedidoDto pedidoDto) {
         try {
+            // Validar si el cliente existe
+            Clientes cliente = clientesService.findById(pedidoDto.getIdClientes());
+            if (cliente == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El cliente no existe");
+            }
+
             // Crear la entidad Pedido
             Pedido pedido = new Pedido();
-
-            // Asignar el cliente al pedido
-            pedido.setIdClientes(clientesService.findById(pedidoDto.getIdClientes()));
+            pedido.setIdClientes(cliente);
             pedido.setIdEstado(estadoService.findById(pedidoDto.getIdEstado()));
 
             // Asignar direcciones y ubicaciones
@@ -108,7 +112,6 @@ public class PedidoController {
             // Guardar el pedido en la base de datos
             pedidoService.save(pedido);
 
-            // Devolver mensaje personalizado en lugar del pedido completo
             return ResponseEntity.status(HttpStatus.CREATED).body("Pedido registrado con éxito");
 
         } catch (Exception e) {
