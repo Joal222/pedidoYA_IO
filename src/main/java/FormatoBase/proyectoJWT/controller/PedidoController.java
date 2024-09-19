@@ -97,6 +97,8 @@ public class PedidoController {
             pedido.setDireccionEntrega(pedidoDto.getDireccionEntrega());
             pedido.setLatitud(pedidoDto.getLatitud());
             pedido.setLongitud(pedidoDto.getLongitud());
+            pedido.setClientePedido(pedidoDto.getClientePedido());
+            pedido.setTelefonoPedido(pedidoDto.getTelefonoPedido());
 
             // Asignar los productos relacionados
             if (pedidoDto.getPedidoProductoList() != null) {
