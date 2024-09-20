@@ -20,6 +20,9 @@ public class Proveedores extends BaseEntity {
     @Column(name = "id")
     private Integer id;
 
+    @Column(name = "nombre_proveedor")
+    private String nombreComercial;
+
     @Column(name = "latitud")
     private Double latitud;
 
@@ -31,6 +34,9 @@ public class Proveedores extends BaseEntity {
 
     @Column(name = "horario_atencion")
     private String horarioAtencion;
+
+    @Column(name = "pbx")
+    private String pbx;
 
     @OneToMany(mappedBy = "idProveedor", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProveedorProducto> proveedorProductoList = new ArrayList<>();
