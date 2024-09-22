@@ -35,6 +35,9 @@ public class AuthController {
             return ResponseEntity.ok(authService.authenticate(request));
         } catch (CustomAuthenticationException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ErrorResponse.builder().errorMessage(e.getMessage()).build());
+        } catch (Exception e) {
+            // Captura cualquier otra excepción inesperada
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor: " + e.getMessage());
         }
     }
 

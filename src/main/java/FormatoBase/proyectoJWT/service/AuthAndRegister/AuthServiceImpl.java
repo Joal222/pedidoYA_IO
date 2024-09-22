@@ -3,6 +3,8 @@ package FormatoBase.proyectoJWT.service.AuthAndRegister;
 import FormatoBase.proyectoJWT.exception.CustomAuthenticationException;
 import FormatoBase.proyectoJWT.exception.DuplicateEmailException;
 import FormatoBase.proyectoJWT.exception.InvalidPasswordFormatException;
+import FormatoBase.proyectoJWT.model.entity.Clientes;
+import FormatoBase.proyectoJWT.model.repository.ClientesRepository;
 import FormatoBase.proyectoJWT.model.repository.UserRepository;
 import FormatoBase.proyectoJWT.model.dto.AuthAndRegister.AuthResponse;
 import FormatoBase.proyectoJWT.model.dto.AuthAndRegister.AuthenticationRequest;
@@ -26,6 +28,7 @@ import java.util.regex.Pattern;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
+    private final ClientesRepository clientesRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;//Interfaz propia de Spring Security
@@ -54,6 +57,12 @@ public class AuthServiceImpl implements AuthService {
                 .role(Role.USER)//Por default se coloco USER = usuario normal, modificar lógica según requerimiento.
                 .build();
         userRepository.save(user);
+
+        // Crear y guardar el cliente relacionado con el nuevo usuario
+        var cliente = Clientes.builder()
+                .idUser(user) // Asociar el cliente con el usuario recién creado
+                .build();
+        clientesRepository.save(cliente); // Guardar el cliente
         var jwtToken = jwtService.generateToken(Map.of("id", user.getId()), user);//Siempre a base de userDetails
         return AuthResponse.builder()
                 .token(jwtToken)
@@ -83,6 +92,10 @@ public class AuthServiceImpl implements AuthService {
                     .build();
         } catch (UsernameNotFoundException e) {
             throw new CustomAuthenticationException("Usuario no registrado");
+        } catch (Exception e) {
+            // Captura cualquier excepción genérica inesperada
+            throw new RuntimeException("Error inesperado durante la autenticación: " + e.getMessage());
         }
     }
+
 }
