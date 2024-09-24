@@ -63,6 +63,7 @@ public class AuthServiceImpl implements AuthService {
                 .idUser(user) // Asociar el cliente con el usuario recién creado
                 .build();
         clientesRepository.save(cliente); // Guardar el cliente
+
         var jwtToken = jwtService.generateToken(Map.of("id", user.getId()), user);//Siempre a base de userDetails
         return AuthResponse.builder()
                 .token(jwtToken)
