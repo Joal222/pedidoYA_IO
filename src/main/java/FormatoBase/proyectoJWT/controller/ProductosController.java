@@ -1,6 +1,8 @@
 package FormatoBase.proyectoJWT.controller;
 
+import FormatoBase.proyectoJWT.model.dto.ProductoDto;
 import FormatoBase.proyectoJWT.model.entity.Productos;
+import FormatoBase.proyectoJWT.model.entity.TipoProducto;
 import FormatoBase.proyectoJWT.service.CrudServiceProcessingController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +18,8 @@ public class ProductosController {
 
     @Autowired
     private CrudServiceProcessingController<Productos,Integer> productosService;
-
+    @Autowired
+    private CrudServiceProcessingController<TipoProducto, Integer> tipoProductoService;
     @GetMapping("/get/listProductsAll")
     public ResponseEntity<?> getAllProducts(){
         try {
@@ -44,29 +47,68 @@ public class ProductosController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createProduct(@RequestBody Productos producto) {
+    public ResponseEntity<?> createProduct(@RequestBody ProductoDto productoDTO) {
         try {
+            Productos producto = new Productos();
+            // Asignar los campos del producto
+            producto.setDescripcion(productoDTO.getDescripcion());
+            producto.setNombreProducto(productoDTO.getNombreProducto());
+            producto.setDimensionM3(productoDTO.getDimensionM3());
+            producto.setPesoKg(productoDTO.getPesoKg());
+            producto.setPrecio(productoDTO.getPrecio());
+            producto.setUrl(productoDTO.getUrl());
+
+            // Validar que el TipoProducto exista en la base de datos
+            TipoProducto tipoProducto = tipoProductoService.findById(productoDTO.getIdTipoProducto());
+            if (tipoProducto == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("El tipo de producto ingresado no es válido. No existe en la base de datos.");
+            }
+
+            producto.setIdTipoProducto(tipoProducto);
+
+            // Guardar el nuevo producto
             Productos newProduct = productosService.save(producto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Producto Creado Con exito");
+
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el producto");
+            e.printStackTrace();  // Imprime el error en la consola
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el producto: " + e.getMessage());
         }
     }
 
+
+
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable Integer id, @RequestBody Productos producto) {
+    public ResponseEntity<?> updateProduct(@PathVariable Integer id, @RequestBody ProductoDto productoDTO) {
         try {
             Productos existingProduct = productosService.findById(id);
             if (existingProduct == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado");
             }
-            producto.setId(id);  // Asegúrate de que el ID sea el mismo para actualizar
-            Productos updatedProduct = productosService.update(producto);
-            return ResponseEntity.ok(updatedProduct);
+
+            // Asignar los campos actualizados
+            existingProduct.setDescripcion(productoDTO.getDescripcion());
+            existingProduct.setNombreProducto(productoDTO.getNombreProducto());
+            existingProduct.setDimensionM3(productoDTO.getDimensionM3());
+            existingProduct.setPesoKg(productoDTO.getPesoKg());
+            existingProduct.setPrecio(productoDTO.getPrecio());
+            existingProduct.setUrl(productoDTO.getUrl());
+
+            // Validar y asignar el TipoProducto (sin Optional)
+            TipoProducto tipoProducto = tipoProductoService.findById(productoDTO.getIdTipoProducto());
+            if (tipoProducto == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El tipo de producto ingresado no es válido");
+            }
+            existingProduct.setIdTipoProducto(tipoProducto);
+
+            Productos updatedProduct = productosService.update(existingProduct);
+            return ResponseEntity.ok("Producto actualizado correctamente");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el producto");
         }
     }
+
 
 
 

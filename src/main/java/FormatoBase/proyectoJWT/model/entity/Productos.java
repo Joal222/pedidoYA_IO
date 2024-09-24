@@ -3,6 +3,7 @@ package FormatoBase.proyectoJWT.model.entity;
 import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.ArrayList;
