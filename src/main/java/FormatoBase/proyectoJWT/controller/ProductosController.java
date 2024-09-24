@@ -43,5 +43,32 @@ public class ProductosController {
         }
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<?> createProduct(@RequestBody Productos producto) {
+        try {
+            Productos newProduct = productosService.save(producto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el producto");
+        }
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateProduct(@PathVariable Integer id, @RequestBody Productos producto) {
+        try {
+            Productos existingProduct = productosService.findById(id);
+            if (existingProduct == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado");
+            }
+            producto.setId(id);  // Asegúrate de que el ID sea el mismo para actualizar
+            Productos updatedProduct = productosService.update(producto);
+            return ResponseEntity.ok(updatedProduct);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el producto");
+        }
+    }
+
+
+
 
 }
