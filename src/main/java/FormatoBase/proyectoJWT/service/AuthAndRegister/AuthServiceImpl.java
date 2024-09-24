@@ -86,16 +86,17 @@ public class AuthServiceImpl implements AuthService {
                 throw new CustomAuthenticationException("Contraseña incorrecta");
             }
 
-            var jwtToken = jwtService.generateToken(Map.of("id", user.getId()), user);
+            // Generar el token incluyendo el rol del usuario
+            var jwtToken = jwtService.generateToken(user);
             return AuthResponse.builder()
                     .token(jwtToken)
                     .build();
         } catch (UsernameNotFoundException e) {
             throw new CustomAuthenticationException("Usuario no registrado");
         } catch (Exception e) {
-            // Captura cualquier excepción genérica inesperada
             throw new RuntimeException("Error inesperado durante la autenticación: " + e.getMessage());
         }
     }
+
 
 }

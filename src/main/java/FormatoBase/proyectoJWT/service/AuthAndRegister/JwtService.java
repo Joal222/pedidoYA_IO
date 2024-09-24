@@ -19,10 +19,17 @@ public class JwtService {
     private static final String SECRET_KEY = "cHL5E41qNTtMSLXr3djdEI5JFCg9DpTovQCOhhPNV/pyo9Y357RXidj08B3Z3Q3KZZzwyzzz21YmZ4a7Z9LcSzOg51pt/bFssEc2dUU0lqkoq1zVb4W83+1TTbjwzREvEUdmL2hD9tWEOpomvTvY4vH1N9bXzWtGOILeZAxYo6zXZ8V8LnmP36GFZsXFUpveHTk+5+3CDctQGlZNA2NnEyK7XEom97aVuOlSBBH3Js2XOaL74zDr3COs0X95oNQqJCd0dbBA1u1Y0/meXHd7DCmCjm6TtIAdUuetF8nttVxg6VTCmwWxeoqY6Ha2N6+ZxFymy9w8xu+94kueXD8YVIY8Pt6NtRniKTSV4BB1F9s=";
 
     public String generateToken(User user) {
-        return generateToken(Map.of("role", user.getRole().name()), user);
+        // Incluyendo role, id y sub (correo) en los claims
+        return generateToken(Map.of(
+                "role", user.getRole().name(),
+                "id", user.getId(),  // Agregando el id del usuario
+                "sub", user.getEmail()  // El correo ya está incluido como "sub"
+        ), user);
     }
 
-    public String generateToken(UserDetails userDetails) {return generateToken(Map.of(), userDetails);//new HashMap<>(), userDetails
+
+    public String generateToken(UserDetails userDetails) {
+        return generateToken(Map.of(), userDetails);//new HashMap<>(), userDetails
     }
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {//Generar token con claims
         return Jwts.builder().setClaims(extraClaims)
