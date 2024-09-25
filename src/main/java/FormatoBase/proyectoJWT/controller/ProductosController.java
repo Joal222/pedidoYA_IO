@@ -4,6 +4,7 @@ import FormatoBase.proyectoJWT.model.dto.ProductoDto;
 import FormatoBase.proyectoJWT.model.entity.Productos;
 import FormatoBase.proyectoJWT.model.entity.TipoProducto;
 import FormatoBase.proyectoJWT.service.CrudServiceProcessingController;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,7 @@ public class ProductosController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createProduct(@RequestBody ProductoDto productoDTO) {
+    public ResponseEntity<?> createProduct(@Valid @RequestBody ProductoDto productoDTO) {
         try {
             Productos producto = new Productos();
             // Asignar los campos del producto
@@ -80,7 +81,7 @@ public class ProductosController {
 
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable Integer id, @RequestBody ProductoDto productoDTO) {
+    public ResponseEntity<?> updateProduct(@Valid @PathVariable Integer id, @Valid @RequestBody ProductoDto productoDTO) {
         try {
             Productos existingProduct = productosService.findById(id);
             if (existingProduct == null) {
@@ -95,7 +96,7 @@ public class ProductosController {
             existingProduct.setPrecio(productoDTO.getPrecio());
             existingProduct.setUrl(productoDTO.getUrl());
 
-            // Validar y asignar el TipoProducto (sin Optional)
+            // Validar y asignar el TipoProducto
             TipoProducto tipoProducto = tipoProductoService.findById(productoDTO.getIdTipoProducto());
             if (tipoProducto == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El tipo de producto ingresado no es válido");
@@ -105,9 +106,10 @@ public class ProductosController {
             Productos updatedProduct = productosService.update(existingProduct);
             return ResponseEntity.ok("Producto actualizado correctamente");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el producto");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el producto: " + e.getMessage());
         }
     }
+
 
 
 
