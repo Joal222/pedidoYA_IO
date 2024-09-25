@@ -1,5 +1,6 @@
 package FormatoBase.proyectoJWT.service.impl;
 
+import FormatoBase.proyectoJWT.model.entity.Productos;
 import FormatoBase.proyectoJWT.model.entity.TipoProducto;
 import FormatoBase.proyectoJWT.model.repository.TipoProductoRepository;
 import FormatoBase.proyectoJWT.service.CrudServiceProcessingController;
@@ -38,7 +39,7 @@ public class TipoProductoImpl implements CrudServiceProcessingController<TipoPro
     @Transactional(readOnly = true)
     @Override
     public List<TipoProducto> findAll() {
-        return null;
+        return (List<TipoProducto>) tipoProductoRepo.findAll();
     }
 
     @Transactional

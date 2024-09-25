@@ -23,6 +23,9 @@ public class TipoProducto extends BaseEntity {
     @Column(name = "nombre")
     private String nombre;
 
+    @Column(name = "estado")
+    private Integer estado;
+
     @OneToMany(mappedBy = "idTipoProducto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Productos> productosList = new ArrayList<>();
 
