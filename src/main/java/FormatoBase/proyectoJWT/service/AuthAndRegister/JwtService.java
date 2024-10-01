@@ -20,9 +20,11 @@ public class JwtService {
 
     public String generateToken(User user) {
         // Incluyendo role, id y sub (correo) en los claims
+        Integer idCliente = user.getClientesList().isEmpty() ? null : user.getClientesList().get(0).getId();
+
         return generateToken(Map.of(
                 "role", user.getRole().name(),
-                "id", user.getId(),  // Agregando el id del usuario
+                "idCliente", idCliente,  // Agregando el id del usuario
                 "sub", user.getEmail()  // El correo ya está incluido como "sub"
         ), user);
     }
