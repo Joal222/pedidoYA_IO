@@ -37,9 +37,9 @@ public class ClienteController {
     return new ResponseEntity<>(clienteDtos, HttpStatus.OK);
   }
 
-  @GetMapping("/user/{id}")
-  public ResponseEntity<Object> getClienteByUserId(@PathVariable Integer id) {
-    Clientes cliente = clienteService.findByUserId(id);
+  @GetMapping("/cliente/{id}")
+  public ResponseEntity<Object> getClienteById(@PathVariable Integer id) {
+    Clientes cliente = clienteService.findById(id);
     if (cliente == null) {
       return new ResponseEntity<>("Cliente no encontrado para este User ID", HttpStatus.NOT_FOUND);
     }
