@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,11 +32,6 @@ public class Empleado extends BaseEntity {
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_ruta_recoleccion",referencedColumnName = "id")
-    private RutaRecoleccion idRutaRecoleccion;
-
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_puesto",referencedColumnName = "id")
     private Puesto idPuesto;
 
@@ -41,4 +39,13 @@ public class Empleado extends BaseEntity {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user",referencedColumnName = "id")
     private User idUser;
+
+    @OneToMany(mappedBy = "idEmpleado", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Driver> driverList = new ArrayList<>();
+
+    /*
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_ruta_recoleccion",referencedColumnName = "id")
+    private RutaRecoleccion idRutaRecoleccion;*/
 }

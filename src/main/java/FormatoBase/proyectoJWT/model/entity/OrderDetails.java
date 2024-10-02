@@ -11,23 +11,18 @@ import lombok.*;
 @ToString
 @Builder
 @Entity
-@Table(name = "tablon")
-public class Tablon extends BaseEntity {
+@Table(name = "order_details")
+public class OrderDetails extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    /*@JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_cliente",referencedColumnName = "id")
-    private Clientes idClientes;*/
-
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_Vehiculo",referencedColumnName = "id")
-    private Vehiculo idVehiculo;
+    @JoinColumn(name = "id_driver",referencedColumnName = "id")
+    private Driver idDriver;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -36,11 +31,22 @@ public class Tablon extends BaseEntity {
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_tipo_combustible",referencedColumnName = "id")
+    private TipoCombustible idTipoCombustible;
+
+    /*
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_ruta_entrega",referencedColumnName = "id")
     private RutaEntrega idRutaEntrega;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_ruta_recoleccion",referencedColumnName = "id")
-    private RutaRecoleccion idRutaRecoleccion;
+    private RutaRecoleccion idRutaRecoleccion;*/
+
+    /*@JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_cliente",referencedColumnName = "id")
+    private Clientes idClientes;*/
 }

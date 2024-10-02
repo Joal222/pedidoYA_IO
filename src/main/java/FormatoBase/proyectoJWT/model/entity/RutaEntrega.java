@@ -27,11 +27,12 @@ public class RutaEntrega extends BaseEntity {
     @Column(name = "nombre")
     private String nombre;
 
+    /*
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "idVehiculo",referencedColumnName = "id")
     private Vehiculo idVehiculo;
 
     @OneToMany(mappedBy = "idRutaEntrega", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Tablon> tablonList = new ArrayList<>();
+    private List<OrderDetails> orderDetailsList = new ArrayList<>();*/
 }

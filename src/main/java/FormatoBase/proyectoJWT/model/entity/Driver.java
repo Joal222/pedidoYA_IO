@@ -14,7 +14,8 @@ import java.util.List;
 @ToString
 @Builder
 @Entity
-public class Vehiculo extends BaseEntity {
+@Table(name = "driver")
+public class Driver extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -26,7 +27,7 @@ public class Vehiculo extends BaseEntity {
     @Column(name = "marca")
     private String marca;
 
-    @Column(name = "limite_Capacidad")
+    @Column(name = "limite_capacidad")
     private float limiteCapacidad;
 
     @Column(name = "latitud")
@@ -35,20 +36,26 @@ public class Vehiculo extends BaseEntity {
     @Column(name = "longitud")
     private Double longitud;
 
-    @Column(name = "costo_Activacion")
+    @Column(name = "costo_activacion")
     private float costoActivacion;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo_vehiculo",referencedColumnName = "id")
     private TipoVehiculo idTipoVehiculo;
 
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_empleado",referencedColumnName = "id")
+    private Empleado idEmpleado;
+
+    @OneToMany(mappedBy = "idDriver", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<OrderDetails> orderDetailsList = new ArrayList<>();
+
+        /*
     @OneToMany(mappedBy = "idVehiculo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<RutaEntrega> rutaEntregaList = new ArrayList<>();
 
     @OneToMany(mappedBy = "idVehiculo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<RutaRecoleccion> rutaRecoleccionList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "idVehiculo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Tablon> tablonList = new ArrayList<>();
+    private List<RutaRecoleccion> rutaRecoleccionList = new ArrayList<>();*/
 }

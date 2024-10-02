@@ -13,7 +13,8 @@ import java.util.List;
 @ToString
 @Builder
 @Entity
-public class TipoVehiculo extends BaseEntity {
+@Table(name = "tipo_combustible")
+public class TipoCombustible extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -22,6 +23,9 @@ public class TipoVehiculo extends BaseEntity {
     @Column(name = "nombre")
     private String nombre;
 
-    @OneToMany(mappedBy = "idTipoVehiculo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Driver> driverList = new ArrayList<>();
+    @Column(name = "precio")
+    private float precio;
+
+    @OneToMany(mappedBy = "idTipoCombustible", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<OrderDetails> orderDetailsList = new ArrayList<>();
 }

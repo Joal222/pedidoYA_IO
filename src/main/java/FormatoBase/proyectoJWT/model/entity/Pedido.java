@@ -3,7 +3,6 @@ package FormatoBase.proyectoJWT.model.entity;
 import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ public class Pedido extends BaseEntity {
     private List<PedidoProducto> pedidoProductoList = new ArrayList<>();
 
     @OneToMany(mappedBy = "idPedido", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Tablon> tablonList = new ArrayList<>();
+    private List<OrderDetails> orderDetailsList = new ArrayList<>();
 
     /*@NotNull
     @Column(name = "ubicacionEntrega")

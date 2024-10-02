@@ -1,6 +1,6 @@
 package FormatoBase.proyectoJWT.service.impl;
 
-import FormatoBase.proyectoJWT.model.entity.Vehiculo;
+import FormatoBase.proyectoJWT.model.entity.Driver;
 import FormatoBase.proyectoJWT.model.repository.VehiculoRepository;
 import FormatoBase.proyectoJWT.service.CrudServiceProcessingController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,38 +10,38 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class VehiculoImpl implements CrudServiceProcessingController<Vehiculo, Integer> {
+public class VehiculoImpl implements CrudServiceProcessingController<Driver, Integer> {
 
     @Autowired
     private VehiculoRepository vehiculoRepository;
 
     @Transactional
     @Override
-    public Vehiculo save(Vehiculo vehiculo) {
-        return vehiculoRepository.save(vehiculo);
+    public Driver save(Driver driver) {
+        return vehiculoRepository.save(driver);
     }
 
     @Transactional
     @Override
-    public Vehiculo update(Vehiculo vehiculo) {
-        return vehiculoRepository.save(vehiculo);
+    public Driver update(Driver driver) {
+        return vehiculoRepository.save(driver);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Vehiculo findById(Integer id) {
+    public Driver findById(Integer id) {
         return vehiculoRepository.findById(id).orElse(null);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<Vehiculo> findAll() {
+    public List<Driver> findAll() {
         return null;
     }
 
     @Transactional
     @Override
-    public void delete(Vehiculo vehiculo) {
-        vehiculoRepository.delete(vehiculo);
+    public void delete(Driver driver) {
+        vehiculoRepository.delete(driver);
     }
 }

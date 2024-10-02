@@ -2,8 +2,6 @@ package FormatoBase.proyectoJWT.model.entity.AuthAndRegister;
 
 import FormatoBase.proyectoJWT.model.entity.Clientes;
 import FormatoBase.proyectoJWT.model.entity.Empleado;
-import FormatoBase.proyectoJWT.model.entity.RutaEntrega;
-import FormatoBase.proyectoJWT.model.entity.Vehiculo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
