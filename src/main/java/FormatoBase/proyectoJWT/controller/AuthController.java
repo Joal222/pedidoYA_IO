@@ -1,7 +1,6 @@
 package FormatoBase.proyectoJWT.controller;
 
-import FormatoBase.proyectoJWT.model.dto.AuthAndRegister.ErrorResponse;
-import FormatoBase.proyectoJWT.model.dto.AuthAndRegister.RegisterRequest;
+import FormatoBase.proyectoJWT.model.dto.AuthAndRegister.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import FormatoBase.proyectoJWT.exception.CustomAuthenticationException;
 import FormatoBase.proyectoJWT.exception.DuplicateEmailException;
 import FormatoBase.proyectoJWT.exception.InvalidPasswordFormatException;
-import FormatoBase.proyectoJWT.model.dto.AuthAndRegister.AuthResponse;
-import FormatoBase.proyectoJWT.model.dto.AuthAndRegister.AuthenticationRequest;
 import FormatoBase.proyectoJWT.service.AuthService;
 
 @RestController
@@ -28,6 +25,11 @@ public class AuthController {
         return ResponseEntity.ok(authService.register(request));
     }
 
+    @CrossOrigin(origins = "*")
+    @PostMapping("/register/admin")
+    public ResponseEntity<AuthResponse> registerAdmin(@RequestBody RegisterRequestAdmin requestAdmin) {
+        return ResponseEntity.ok(authService.registerAdmin(requestAdmin));
+    }
     @CrossOrigin(origins = "*")
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {

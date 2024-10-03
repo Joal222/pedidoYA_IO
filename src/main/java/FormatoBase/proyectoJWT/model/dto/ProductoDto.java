@@ -4,6 +4,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @ToString
 @Builder
@@ -35,4 +37,6 @@ public class ProductoDto {
   private String url;
 
   private Integer idTipoProducto;
+
+  private List<Integer> idProveedores;
 }

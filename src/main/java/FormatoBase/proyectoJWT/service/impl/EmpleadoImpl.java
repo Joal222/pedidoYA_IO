@@ -4,6 +4,7 @@ import FormatoBase.proyectoJWT.model.entity.ClienteProducto;
 import FormatoBase.proyectoJWT.model.entity.Empleado;
 import FormatoBase.proyectoJWT.model.repository.EmpleadoRepository;
 import FormatoBase.proyectoJWT.service.CrudServiceProcessingController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Service
 public class EmpleadoImpl implements CrudServiceProcessingController<Empleado, Integer> {
 
+    @Autowired
     private EmpleadoRepository empleadoRepo;
     @Transactional
     @Override
@@ -34,7 +36,7 @@ public class EmpleadoImpl implements CrudServiceProcessingController<Empleado, I
     @Transactional(readOnly = true)
     @Override
     public List<Empleado> findAll() {
-        return null;
+        return empleadoRepo.findAll();
     }
 
     @Transactional

@@ -18,9 +18,6 @@ public class ProveedorProducto extends BaseEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "disponibilidad")
-    private Boolean disponibilidad;
-
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_proveedor",referencedColumnName = "id")
