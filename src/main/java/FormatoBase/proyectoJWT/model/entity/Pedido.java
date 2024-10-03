@@ -50,12 +50,4 @@ public class Pedido extends BaseEntity {
 
     @OneToMany(mappedBy = "idPedido", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderDetails> orderDetailsList = new ArrayList<>();
-
-    /*@NotNull
-    @Column(name = "ubicacionEntrega")
-    private String ubicacionEntrega;*/
-
-    /*@NotNull
-    @Column(name = "ubicacionRecepcion")
-    private String ubicacionRecepcion; */
 }

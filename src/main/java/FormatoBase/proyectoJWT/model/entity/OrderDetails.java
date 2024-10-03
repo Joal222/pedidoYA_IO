@@ -33,20 +33,4 @@ public class OrderDetails extends BaseEntity {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo_combustible",referencedColumnName = "id")
     private TipoCombustible idTipoCombustible;
-
-    /*
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_ruta_entrega",referencedColumnName = "id")
-    private RutaEntrega idRutaEntrega;
-
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_ruta_recoleccion",referencedColumnName = "id")
-    private RutaRecoleccion idRutaRecoleccion;*/
-
-    /*@JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_cliente",referencedColumnName = "id")
-    private Clientes idClientes;*/
 }

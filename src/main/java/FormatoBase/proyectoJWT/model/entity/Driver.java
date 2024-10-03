@@ -51,11 +51,4 @@ public class Driver extends BaseEntity {
 
     @OneToMany(mappedBy = "idDriver", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderDetails> orderDetailsList = new ArrayList<>();
-
-        /*
-    @OneToMany(mappedBy = "idVehiculo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<RutaEntrega> rutaEntregaList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "idVehiculo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<RutaRecoleccion> rutaRecoleccionList = new ArrayList<>();*/
 }

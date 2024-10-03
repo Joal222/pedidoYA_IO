@@ -19,7 +19,7 @@ public class ProveedorProducto extends BaseEntity {
     private Integer id;
 
     @Column(name = "disponibilidad")
-    private Boolean disponibilidad;
+    private int disponibilidad;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
