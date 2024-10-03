@@ -23,20 +23,22 @@ public class ProductoDto {
 
   @NotNull(message = "Las dimensiones no pueden ser nulas")
   @Min(value = 1, message = "Las dimensiones deben ser mayores que 0")
-  private Float dimensionM3; // Cambiado de float a Float
+  private Float dimensionM3;
 
   @NotNull(message = "El peso no puede ser nulo")
   @Min(value = 1, message = "El peso debe ser mayor que 0")
-  private Float pesoKg; // Cambiado de float a Float
+  private Float pesoKg;
 
   @NotNull(message = "El precio no puede ser nulo")
   @Min(value = 1, message = "El precio debe ser mayor que 0")
-  private Float precio; // Cambiado de float a Float
+  private Float precio;
 
   @NotNull(message = "La URL de imagen no puede ser nulo")
   private String url;
 
   private Integer idTipoProducto;
 
-  private List<Integer> idProveedores;
+  // Cambia de List<Integer> a List<ProveedorCantidadDto>
+  private List<ProveedorProductoDto> proveedores;
 }
+

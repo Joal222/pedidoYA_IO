@@ -41,6 +41,6 @@ public class PedidoDto implements Serializable {
     private String longitud;
 
     @NotNull(message = "Debe haber al menos un producto en el pedido")
-    private List<PedidoProductoDto> pedidoProductoList;  // Para validar que no sea nulo
+    private List<PedidoProductoDto> pedidoProductoList;
 }
 
