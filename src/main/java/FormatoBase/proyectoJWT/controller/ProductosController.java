@@ -1,6 +1,7 @@
 package FormatoBase.proyectoJWT.controller;
 
 import FormatoBase.proyectoJWT.model.dto.ProductoDto;
+import FormatoBase.proyectoJWT.model.dto.ProveedorProductoDto;
 import FormatoBase.proyectoJWT.model.entity.Productos;
 import FormatoBase.proyectoJWT.model.entity.ProveedorProducto;
 import FormatoBase.proyectoJWT.model.entity.Proveedores;
@@ -57,7 +58,6 @@ public class ProductosController {
     public ResponseEntity<?> createProduct(@Valid @RequestBody ProductoDto productoDTO) {
         try {
             Productos producto = new Productos();
-            // Asignar los campos del producto
             producto.setDescripcion(productoDTO.getDescripcion());
             producto.setNombreProducto(productoDTO.getNombreProducto());
             producto.setDimensionM3(productoDTO.getDimensionM3());
@@ -76,18 +76,19 @@ public class ProductosController {
             // Guardar el producto primero
             Productos newProduct = productosService.save(producto);
 
-            // Asociar el producto con los proveedores
-            if (productoDTO.getIdProveedores() != null) {
-                for (Integer proveedorId : productoDTO.getIdProveedores()) {
-                    Proveedores proveedor = proveedoresService.findById(proveedorId);
+            // Asociar el producto con los proveedores y su cantidad (disponibilidad)
+            if (productoDTO.getProveedores() != null) {
+                for (ProveedorProductoDto proveedorDto : productoDTO.getProveedores()) {
+                    Proveedores proveedor = proveedoresService.findById(proveedorDto.getIdProveedor());
                     if (proveedor != null) {
                         ProveedorProducto proveedorProducto = new ProveedorProducto();
                         proveedorProducto.setIdProducto(newProduct);
                         proveedorProducto.setIdProveedor(proveedor);
-                        proveedorProductoService.save(proveedorProducto); // Guardar la relación
+                        proveedorProducto.setDisponibilidad(proveedorDto.getDisponibilidad());
+                        proveedorProductoService.save(proveedorProducto);  // Guardar la relación
                     } else {
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                                .body("El proveedor con ID " + proveedorId + " no existe.");
+                                .body("El proveedor con ID " + proveedorDto.getIdProveedor() + " no existe.");
                     }
                 }
             }
@@ -99,10 +100,7 @@ public class ProductosController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el producto: " + e.getMessage());
         }
     }
-
-
-
-
+    
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateProduct(@Valid @PathVariable Integer id, @Valid @RequestBody ProductoDto productoDTO) {
         try {

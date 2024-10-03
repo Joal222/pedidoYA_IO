@@ -17,7 +17,7 @@ public class PedidoProducto extends BaseEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "disponibilidad")
+    @Column(name = "cantidad")
     private int cantidad;
 
     @JsonIgnore
