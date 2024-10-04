@@ -39,6 +39,12 @@ public class ClientesImpl implements IClientes {
         return (List<Clientes>) clientesRepo.findAll();
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Clientes findByUserId(Integer idUser) {
+        return clientesRepo.findByIdUser_Id(idUser);
+    }
+
     @Transactional
     @Override
     public void delete(Clientes clientes) {

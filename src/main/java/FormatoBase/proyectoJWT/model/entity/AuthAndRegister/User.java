@@ -89,10 +89,10 @@ public class User  extends BaseEntity implements UserDetails{
         return true;
     }
 
+    // Inicializamos las listas en la declaración
     @OneToMany(mappedBy = "idUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Empleado> empleadoList = new ArrayList<>();
 
     @OneToMany(mappedBy = "idUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Clientes> clientesList = new ArrayList<>();
-
 }

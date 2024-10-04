@@ -18,8 +18,8 @@ public class ProveedorProducto extends BaseEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "cantidad")
-    private int cantidad;
+    @Column(name = "disponibilidad")
+    private Integer disponibilidad;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -30,4 +30,5 @@ public class ProveedorProducto extends BaseEntity {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_producto",referencedColumnName = "id")
     private Productos idProducto;
+
 }

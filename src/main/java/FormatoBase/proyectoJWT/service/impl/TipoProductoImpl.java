@@ -1,11 +1,13 @@
 package FormatoBase.proyectoJWT.service.impl;
 
+import FormatoBase.proyectoJWT.model.entity.Productos;
 import FormatoBase.proyectoJWT.model.entity.TipoProducto;
 import FormatoBase.proyectoJWT.model.repository.TipoProductoRepository;
 import FormatoBase.proyectoJWT.service.CrudServiceProcessingController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Optional;
 
 import java.util.List;
 
@@ -33,10 +35,11 @@ public class TipoProductoImpl implements CrudServiceProcessingController<TipoPro
         return tipoProductoRepo.findById(id).orElse(null);
     }
 
+
     @Transactional(readOnly = true)
     @Override
     public List<TipoProducto> findAll() {
-        return null;
+        return (List<TipoProducto>) tipoProductoRepo.findAll();
     }
 
     @Transactional

@@ -21,14 +21,14 @@ public class Empleado extends BaseEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "nombre")
-    private String nombre;
-
     @Column(name = "direccion")
     private String direccion;
 
     @Column(name = "telefono")
     private String telefono;
+
+    @Column(name = "dpi")
+    private String dpi;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
