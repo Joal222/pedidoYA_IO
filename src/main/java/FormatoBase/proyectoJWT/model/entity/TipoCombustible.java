@@ -4,6 +4,7 @@ import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class TipoCombustible extends BaseEntity{
     private String nombre;
 
     @Column(name = "precio")
-    private float precio;
+    private BigDecimal precio;
 
     @OneToMany(mappedBy = "idTipoCombustible", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderDetails> orderDetailsList = new ArrayList<>();

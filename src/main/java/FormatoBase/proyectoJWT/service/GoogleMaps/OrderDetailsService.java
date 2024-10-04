@@ -1,13 +1,15 @@
 package FormatoBase.proyectoJWT.service.GoogleMaps;
 
-import FormatoBase.proyectoJWT.model.entity.Pedido;
-import FormatoBase.proyectoJWT.model.entity.ProveedorProducto;
-import FormatoBase.proyectoJWT.model.entity.Proveedores;
+import FormatoBase.proyectoJWT.model.entity.*;
+import FormatoBase.proyectoJWT.model.repository.DriverRepository;
 import FormatoBase.proyectoJWT.model.repository.PedidoRepository;
 import FormatoBase.proyectoJWT.model.repository.ProveedorProductoRepository;
+import FormatoBase.proyectoJWT.model.repository.TipoCombustibleRepository;
 import FormatoBase.proyectoJWT.service.IOrderDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 public class OrderDetailsService implements IOrderDetailsService {
@@ -19,7 +21,13 @@ public class OrderDetailsService implements IOrderDetailsService {
     private ProveedorProductoRepository proveedorProductoRepo;
 
     @Autowired
+    private TipoCombustibleRepository tipoCombustibleRepo;
+
+    @Autowired
     private GoogleMapsService googleMapsService;
+
+    @Autowired
+    private DriverRepository driverRepo;
 
     public Integer calcularCostoPedido(Integer pedidoId, Integer productoId, Integer tipoCombustibleId, Integer driverId) { // Método para calcular el costo total del pedido
         Pedido pedido = obtenerPedidoPorId(pedidoId);// Obtener el pedido por ID
@@ -30,10 +38,11 @@ public class OrderDetailsService implements IOrderDetailsService {
                 //pedido.getLatitud(), pedido.getLongitud()
         );
 
-        Integer precioCombustible = obtenerPrecioCombustible(tipoCombustibleId);  // Obtener el precio del combustible y el costo de activación del conductor
-        Integer costoActivacion = obtenerCostoActivacion(driverId);
+        BigDecimal precioCombustible = obtenerPrecioCombustible(tipoCombustibleId);  // Obtener el precio del combustible y el costo de activación del conductor
+        BigDecimal costoActivacion = obtenerCostoActivacion(driverId);
 
-        return calcularCostoTotal(distanciaEnKm, precioCombustible, costoActivacion);// Calcular el costo total
+        BigDecimal costoTotal = calcularCostoTotal(distanciaEnKm, precioCombustible, costoActivacion);
+        return costoTotal.intValue();// Calcular el costo total
     }
 
     public Integer obtenerDistanciaEnKm(Integer pedidoId, Integer productoId) {// Método para obtener la distancia entre el proveedor y el cliente
@@ -46,8 +55,7 @@ public class OrderDetailsService implements IOrderDetailsService {
         );
     }
 
-    // Lógica auxiliar
-    public Pedido obtenerPedidoPorId(Integer pedidoId) {
+    public Pedido obtenerPedidoPorId(Integer pedidoId) {// Lógica auxiliar
         return pedidoRepo.findById(pedidoId)
                 .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
     }
@@ -58,15 +66,21 @@ public class OrderDetailsService implements IOrderDetailsService {
         return proveedorProducto.getIdProveedor();
     }
 
-    public Integer obtenerPrecioCombustible(Integer tipoCombustibleId) {
-        return 3;// Simulación del precio del combustible
+    public BigDecimal obtenerPrecioCombustible(Integer tipoCombustibleId) {
+        TipoCombustible tipoCombustible = tipoCombustibleRepo.findById(tipoCombustibleId)
+                .orElseThrow(() -> new RuntimeException("Tipo de combustible no encontrado"));
+        return tipoCombustible.getPrecio();  // Asumiendo que tienes un campo 'precio' en la entidad TipoCombustible
     }
 
-    public Integer obtenerCostoActivacion(Integer driverId) {
-        return 10;// Simulación del costo de activación del conductor
+    public BigDecimal obtenerCostoActivacion(Integer driverId) {
+        Driver driver = driverRepo.findById(driverId)
+                .orElseThrow(() -> new RuntimeException("Conductor no encontrado"));
+        return driver.getCostoActivacion();  // Asumiendo que tienes un campo 'costoActivacion' en la entidad Driver
     }
 
-    public Integer calcularCostoTotal(Integer distancia, Integer precioCombustible, Integer costoActivacion) {
-        return distancia * precioCombustible + costoActivacion;
+    public BigDecimal calcularCostoTotal(Integer distancia, BigDecimal precioCombustible, BigDecimal costoActivacion) {
+        BigDecimal distanciaBigDecimal = BigDecimal.valueOf(distancia);
+        BigDecimal costoDistancia = precioCombustible.multiply(distanciaBigDecimal);
+        return costoDistancia.add(costoActivacion);
     }
 }
