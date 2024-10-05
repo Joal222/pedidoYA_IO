@@ -28,9 +28,4 @@ public class OrderDetails extends BaseEntity {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_pedido",referencedColumnName = "id")
     private Pedido idPedido;
-
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_tipo_combustible",referencedColumnName = "id")
-    private TipoCombustible idTipoCombustible;
 }

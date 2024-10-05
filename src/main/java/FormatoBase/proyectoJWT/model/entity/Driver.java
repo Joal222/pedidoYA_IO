@@ -40,6 +40,12 @@ public class Driver extends BaseEntity {
     @Column(name = "costo_activacion")
     private BigDecimal costoActivacion;
 
+    @Column(name = "rendimiento_galon")
+    private BigDecimal rendimientoGalon;
+
+    @Column(name = "direccion")
+    private String direccion;
+
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo_vehiculo",referencedColumnName = "id")
@@ -49,6 +55,11 @@ public class Driver extends BaseEntity {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_empleado",referencedColumnName = "id")
     private Empleado idEmpleado;
+
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_tipo_combustible",referencedColumnName = "id")
+    private TipoCombustible idTipoCombustible;
 
     @OneToMany(mappedBy = "idDriver", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderDetails> orderDetailsList = new ArrayList<>();

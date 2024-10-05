@@ -3,6 +3,7 @@ package FormatoBase.proyectoJWT.model.dto;
 import lombok.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 @ToString
@@ -11,5 +12,5 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class OrderCostResponse implements Serializable {
     private Integer distance;
-    private Integer totalCost;
+    private BigDecimal totalCost;
 }

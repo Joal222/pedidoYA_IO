@@ -28,5 +28,5 @@ public class TipoCombustible extends BaseEntity{
     private BigDecimal precio;
 
     @OneToMany(mappedBy = "idTipoCombustible", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<OrderDetails> orderDetailsList = new ArrayList<>();
+    private List<Driver> driverList = new ArrayList<>();
 }
