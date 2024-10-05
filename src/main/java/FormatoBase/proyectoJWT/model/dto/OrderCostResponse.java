@@ -11,6 +11,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderCostResponse implements Serializable {
-    private Integer distance;
+    private BigDecimal distance;
     private BigDecimal totalCost;
 }

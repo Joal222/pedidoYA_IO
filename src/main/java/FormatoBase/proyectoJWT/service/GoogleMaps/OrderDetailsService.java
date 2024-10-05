@@ -31,7 +31,7 @@ public class OrderDetailsService implements IOrderDetailsService {
         Pedido pedido = obtenerPedidoPorId(pedidoId);
         Proveedores proveedor = obtenerProveedorPorProducto(productoId);
         Driver driver = obtenerDriverPorId(driverId);
-        
+
         Integer distanciaDriverAProveedor = googleMapsService.calcularDistancia(
                 driver.getLatitud(), driver.getLongitud(),
                 proveedor.getLatitud(), proveedor.getLongitud()
@@ -54,14 +54,24 @@ public class OrderDetailsService implements IOrderDetailsService {
     }
 
     @Override
-    public Integer obtenerDistanciaEnKm(Integer pedidoId, Integer productoId) {
+    public BigDecimal obtenerDistanciaEnKm(Integer pedidoId, Integer productoId, Integer driverId) {
         Pedido pedido = obtenerPedidoPorId(pedidoId);
         Proveedores proveedor = obtenerProveedorPorProducto(productoId);
+        Driver driver = obtenerDriverPorId(driverId);
 
-        return googleMapsService.calcularDistancia(
+        Integer distanciaDriverAProveedor = googleMapsService.calcularDistancia(
+                driver.getLatitud(), driver.getLongitud(),
+                proveedor.getLatitud(), proveedor.getLongitud()
+        );
+
+        Integer distanciaProveedorACliente = googleMapsService.calcularDistancia(
                 proveedor.getLatitud(), proveedor.getLongitud(),
                 Double.parseDouble(pedido.getLatitud()), Double.parseDouble(pedido.getLongitud())
         );
+
+        Integer distanciaTotal = distanciaDriverAProveedor + distanciaProveedorACliente;
+
+        return BigDecimal.valueOf(distanciaTotal);
     }
 
     private Pedido obtenerPedidoPorId(Integer pedidoId) {

@@ -33,9 +33,10 @@ public class OrderDetailsController {
                     orderCostRequest.getDriverId()
             );
 
-            Integer distanciaEnKm = orderDetailsService.obtenerDistanciaEnKm(
+            BigDecimal distanciaEnKm = orderDetailsService.obtenerDistanciaEnKm(
                     orderCostRequest.getPedidoId(),
-                    orderCostRequest.getProductoId()
+                    orderCostRequest.getProductoId(),
+                    orderCostRequest.getDriverId()
             );
 
             OrderCostResponse response = new OrderCostResponse();
