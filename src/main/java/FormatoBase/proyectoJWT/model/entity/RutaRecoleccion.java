@@ -24,6 +24,7 @@ public class RutaRecoleccion extends BaseEntity {
     @Column(name = "nombre")
     private String nombre;
 
+    /*
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "idVehiculo",referencedColumnName = "id")
@@ -33,5 +34,5 @@ public class RutaRecoleccion extends BaseEntity {
     private List<Empleado> empleadoList = new ArrayList<>();
 
     @OneToMany(mappedBy = "idRutaRecoleccion", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Tablon> tablonList = new ArrayList<>();
+    private List<OrderDetails> orderDetailsList = new ArrayList<>();*/
 }

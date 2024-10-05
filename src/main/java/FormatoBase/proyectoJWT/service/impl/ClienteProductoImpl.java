@@ -3,7 +3,6 @@ package FormatoBase.proyectoJWT.service.impl;
 
 import FormatoBase.proyectoJWT.model.entity.ClienteProducto;
 
-import FormatoBase.proyectoJWT.model.entity.Vehiculo;
 import FormatoBase.proyectoJWT.model.repository.ClienteProductoRepository;
 import FormatoBase.proyectoJWT.service.CrudServiceProcessingController;
 import org.springframework.beans.factory.annotation.Autowired;

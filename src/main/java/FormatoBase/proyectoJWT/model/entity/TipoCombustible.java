@@ -4,6 +4,7 @@ import FormatoBase.proyectoJWT.model.entity.AuthAndRegister.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,8 @@ import java.util.List;
 @ToString
 @Builder
 @Entity
-public class TipoVehiculo extends BaseEntity {
+@Table(name = "tipo_combustible")
+public class TipoCombustible extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -22,6 +24,9 @@ public class TipoVehiculo extends BaseEntity {
     @Column(name = "nombre")
     private String nombre;
 
-    @OneToMany(mappedBy = "idTipoVehiculo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @Column(name = "precio")
+    private BigDecimal precio;
+
+    @OneToMany(mappedBy = "idTipoCombustible", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Driver> driverList = new ArrayList<>();
 }
