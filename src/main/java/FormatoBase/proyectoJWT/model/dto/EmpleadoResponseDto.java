@@ -12,6 +12,7 @@ public class EmpleadoResponseDto {
   private String direccion;
   private String telefono;
   private String dpi;
+  private int idPuesto;
   private int idUser;
   private String firstName;
   private String lastName;

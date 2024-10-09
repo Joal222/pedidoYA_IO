@@ -37,7 +37,7 @@ public class TipoVehiculoImpl implements CrudServiceProcessingController<TipoVeh
     @Transactional(readOnly = true)
     @Override
     public List<TipoVehiculo> findAll() {
-        return null;
+        return tipoVehiculoRepo.findAll();
     }
 
     @Transactional
