@@ -14,7 +14,8 @@ public class RegisterRequestAdmin {
   private String lastName;
   private String email;
   private String password;
-  private String direccion; // Nuevo campo
-  private String telefono;  // Nuevo campo
-  private String dpi;       // Nuevo campo
+  private String direccion;
+  private String telefono;
+  private String dpi;
+  private Integer idPuesto;
 }

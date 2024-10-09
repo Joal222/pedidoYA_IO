@@ -36,7 +36,7 @@ public class DriverImpl implements CrudServiceProcessingController<Driver, Integ
     @Transactional(readOnly = true)
     @Override
     public List<Driver> findAll() {
-        return null;
+        return driverRepository.findAll();
     }
 
     @Transactional

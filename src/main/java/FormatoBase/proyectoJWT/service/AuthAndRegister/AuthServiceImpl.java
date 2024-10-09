@@ -6,8 +6,10 @@ import FormatoBase.proyectoJWT.exception.InvalidPasswordFormatException;
 import FormatoBase.proyectoJWT.model.dto.AuthAndRegister.RegisterRequestAdmin;
 import FormatoBase.proyectoJWT.model.entity.Clientes;
 import FormatoBase.proyectoJWT.model.entity.Empleado;
+import FormatoBase.proyectoJWT.model.entity.Puesto;
 import FormatoBase.proyectoJWT.model.repository.ClientesRepository;
 import FormatoBase.proyectoJWT.model.repository.EmpleadoRepository;
+import FormatoBase.proyectoJWT.model.repository.PuestoRepository;
 import FormatoBase.proyectoJWT.model.repository.UserRepository;
 import FormatoBase.proyectoJWT.model.dto.AuthAndRegister.AuthResponse;
 import FormatoBase.proyectoJWT.model.dto.AuthAndRegister.AuthenticationRequest;
@@ -33,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final ClientesRepository clientesRepository;
     private final EmpleadoRepository empleadoRepository;
+    private final PuestoRepository puestoRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;//Interfaz propia de Spring Security
@@ -103,18 +106,20 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         // Guardar el usuario primero
-        user = userRepository.save(user);
-
         // Verificar si la lista empleadoList es null y inicializarla si es necesario
         if (user.getEmpleadoList() == null) {
             user.setEmpleadoList(new ArrayList<>());
         }
+
+        Puesto puesto = puestoRepository.findById(requestAdmin.getIdPuesto())
+                .orElseThrow(() -> new RuntimeException("Puesto no encontrado"));
 
         var empleado = Empleado.builder()
                 .idUser(user)
                 .direccion(requestAdmin.getDireccion())
                 .dpi(requestAdmin.getDpi())
                 .telefono(requestAdmin.getTelefono())
+                .idPuesto(puesto)
                 .build();
 
         // Añadir el empleado a la lista del usuario
