@@ -36,7 +36,7 @@ public class PuestoImpl implements CrudServiceProcessingController<Puesto, Integ
     @Transactional(readOnly = true)
     @Override
     public List<Puesto> findAll() {
-        return null;
+        return puestoRepo.findAll();
     }
 
     @Transactional
