@@ -55,6 +55,7 @@ public class EmpleadoController {
             .firstName(user.getFirstName())
             .lastName(user.getLastName())
             .email(user.getEmail())
+            .idPuesto(empleado.getIdPuesto().getId())
             .build();
   }
 
