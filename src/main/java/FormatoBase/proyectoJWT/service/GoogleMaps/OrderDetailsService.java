@@ -32,22 +32,22 @@ public class OrderDetailsService implements IOrderDetailsService {
         Proveedores proveedor = obtenerProveedorPorProducto(productoId);
         Driver driver = obtenerDriverPorId(driverId);
 
-        Integer distanciaDriverAProveedor = googleMapsService.calcularDistancia(
+        BigDecimal distanciaDriverAProveedor = googleMapsService.calcularDistancia(
                 driver.getLatitud(), driver.getLongitud(),
                 proveedor.getLatitud(), proveedor.getLongitud()
         );
 
-        Integer distanciaProveedorACliente = googleMapsService.calcularDistancia(
+        BigDecimal distanciaProveedorACliente = googleMapsService.calcularDistancia(
                 proveedor.getLatitud(), proveedor.getLongitud(),
                 Double.parseDouble(pedido.getLatitud()), Double.parseDouble(pedido.getLongitud())
         );
 
-        Integer distanciaTotal = distanciaDriverAProveedor + distanciaProveedorACliente;
+        BigDecimal distanciaTotal = distanciaDriverAProveedor.add(distanciaProveedorACliente);
 
         BigDecimal precioCombustible = driver.getIdTipoCombustible().getPrecio();
         BigDecimal rendimientoGalon = driver.getRendimientoGalon();
         BigDecimal costoPorGalon = precioCombustible.divide(rendimientoGalon, BigDecimal.ROUND_HALF_UP);
-        BigDecimal costoDistancia = costoPorGalon.multiply(BigDecimal.valueOf(distanciaTotal));
+        BigDecimal costoDistancia = costoPorGalon.multiply(distanciaTotal);
         BigDecimal costoActivacion = driver.getCostoActivacion();
 
         return calcularCostoTotal(costoDistancia, costoActivacion);
@@ -59,19 +59,19 @@ public class OrderDetailsService implements IOrderDetailsService {
         Proveedores proveedor = obtenerProveedorPorProducto(productoId);
         Driver driver = obtenerDriverPorId(driverId);
 
-        Integer distanciaDriverAProveedor = googleMapsService.calcularDistancia(
+        BigDecimal distanciaDriverAProveedor = googleMapsService.calcularDistancia(
                 driver.getLatitud(), driver.getLongitud(),
                 proveedor.getLatitud(), proveedor.getLongitud()
         );
 
-        Integer distanciaProveedorACliente = googleMapsService.calcularDistancia(
+        BigDecimal distanciaProveedorACliente = googleMapsService.calcularDistancia(
                 proveedor.getLatitud(), proveedor.getLongitud(),
                 Double.parseDouble(pedido.getLatitud()), Double.parseDouble(pedido.getLongitud())
         );
 
-        Integer distanciaTotal = distanciaDriverAProveedor + distanciaProveedorACliente;
+        BigDecimal distanciaTotal = distanciaDriverAProveedor.add(distanciaProveedorACliente);
 
-        return BigDecimal.valueOf(distanciaTotal);
+        return distanciaTotal;
     }
 
     private Pedido obtenerPedidoPorId(Integer pedidoId) {
