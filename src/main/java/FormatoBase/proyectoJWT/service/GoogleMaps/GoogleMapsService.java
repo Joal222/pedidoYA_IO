@@ -12,7 +12,7 @@ import java.math.RoundingMode;
 @Service
 public class GoogleMapsService implements IGoogleMapsService {
 
-    private static final String API_KEY = "AIzaSyC4_BK38Vw1dTBTt5PeI-LGsM4kFMusO78";// Clave de API de Google Maps
+    private static final String API_KEY = "AIzaSyC4_BK38Vw1dTBTt5PeI-LGsM4kFMusO78";
 
     public BigDecimal calcularDistancia(Double latitudOrigen, Double longitudOrigen, Double latitudDestino, Double longitudDestino) {
         try {
@@ -26,7 +26,6 @@ public class GoogleMapsService implements IGoogleMapsService {
             JsonNode raiz = objectMapper.readTree(respuesta);
             JsonNode nodoDistancia = raiz.path("rows").get(0).path("elements").get(0).path("distance").path("value");
 
-            // Convertir distancia a BigDecimal y luego a kilómetros
             BigDecimal distanciaEnMetros = new BigDecimal(nodoDistancia.asText());
             BigDecimal distanciaEnKilometros = distanciaEnMetros.divide(BigDecimal.valueOf(1000), 2, RoundingMode.HALF_UP);
 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class OrderDetailsService implements IOrderDetailsService {
@@ -27,30 +28,12 @@ public class OrderDetailsService implements IOrderDetailsService {
 
     @Override
     public BigDecimal calcularCostoPedido(Integer pedidoId, Integer productoId, Integer driverId) {
-
         Pedido pedido = obtenerPedidoPorId(pedidoId);
         Proveedores proveedor = obtenerProveedorPorProducto(productoId);
         Driver driver = obtenerDriverPorId(driverId);
 
-        BigDecimal distanciaDriverAProveedor = googleMapsService.calcularDistancia(
-                driver.getLatitud(), driver.getLongitud(),
-                proveedor.getLatitud(), proveedor.getLongitud()
-        );
-
-        BigDecimal distanciaProveedorACliente = googleMapsService.calcularDistancia(
-                proveedor.getLatitud(), proveedor.getLongitud(),
-                Double.parseDouble(pedido.getLatitud()), Double.parseDouble(pedido.getLongitud())
-        );
-
-        BigDecimal distanciaTotal = distanciaDriverAProveedor.add(distanciaProveedorACliente);
-
-        BigDecimal precioCombustible = driver.getIdTipoCombustible().getPrecio();
-        BigDecimal rendimientoGalon = driver.getRendimientoGalon();
-        BigDecimal costoPorGalon = precioCombustible.divide(rendimientoGalon, BigDecimal.ROUND_HALF_UP);
-        BigDecimal costoDistancia = costoPorGalon.multiply(distanciaTotal);
-        BigDecimal costoActivacion = driver.getCostoActivacion();
-
-        return calcularCostoTotal(costoDistancia, costoActivacion);
+        BigDecimal distanciaTotal = calcularDistanciaEntreEntidades(driver, proveedor, pedido);
+        return calcularCostoPorDistancia(distanciaTotal, driver);
     }
 
     @Override
@@ -59,6 +42,46 @@ public class OrderDetailsService implements IOrderDetailsService {
         Proveedores proveedor = obtenerProveedorPorProducto(productoId);
         Driver driver = obtenerDriverPorId(driverId);
 
+        return calcularDistanciaEntreEntidades(driver, proveedor, pedido);
+    }
+
+    @Override
+    public int[] obtenerDemanda(List<Pedido> pedidos, Integer productoId) {
+        return pedidos.stream()
+                .mapToInt(pedido -> pedido.getPedidoProductoList().stream()
+                        .filter(pp -> pp.getIdProducto().getId().equals(productoId))
+                        .mapToInt(PedidoProducto::getCantidad)
+                        .sum())
+                .toArray();
+    }
+
+    @Override
+    public int[] obtenerOferta(List<Proveedores> proveedores, Integer productoId) {
+        return proveedores.stream()
+                .mapToInt(proveedor -> proveedor.getProveedorProductoList().stream()
+                        .filter(pp -> pp.getIdProducto().getId().equals(productoId))
+                        .mapToInt(ProveedorProducto::getDisponibilidad)
+                        .sum())
+                .toArray();
+    }
+
+    @Override
+    public BigDecimal[][] obtenerCostos(List<Pedido> pedidos, List<Proveedores> proveedores, Integer productoId, Integer driverId) {
+        BigDecimal[][] costos = new BigDecimal[proveedores.size()][pedidos.size()];
+
+        for (int i = 0; i < proveedores.size(); i++) {
+            Proveedores proveedor = proveedores.get(i);
+            for (int j = 0; j < pedidos.size(); j++) {
+                Pedido pedido = pedidos.get(j);
+                BigDecimal distanciaTotal = calcularDistanciaEntreEntidades(driverRepo.findById(driverId).get(), proveedor, pedido);
+                costos[i][j] = calcularCostoPorDistancia(distanciaTotal, driverRepo.findById(driverId).get());
+            }
+        }
+
+        return costos;
+    }
+
+    private BigDecimal calcularDistanciaEntreEntidades(Driver driver, Proveedores proveedor, Pedido pedido) {
         BigDecimal distanciaDriverAProveedor = googleMapsService.calcularDistancia(
                 driver.getLatitud(), driver.getLongitud(),
                 proveedor.getLatitud(), proveedor.getLongitud()
@@ -69,9 +92,16 @@ public class OrderDetailsService implements IOrderDetailsService {
                 Double.parseDouble(pedido.getLatitud()), Double.parseDouble(pedido.getLongitud())
         );
 
-        BigDecimal distanciaTotal = distanciaDriverAProveedor.add(distanciaProveedorACliente);
+        return distanciaDriverAProveedor.add(distanciaProveedorACliente);
+    }
 
-        return distanciaTotal;
+    private BigDecimal calcularCostoPorDistancia(BigDecimal distanciaTotal, Driver driver) {
+        BigDecimal precioCombustible = driver.getIdTipoCombustible().getPrecio();
+        BigDecimal rendimientoGalon = driver.getRendimientoGalon();
+        BigDecimal costoPorGalon = precioCombustible.divide(rendimientoGalon, BigDecimal.ROUND_HALF_UP);
+        BigDecimal costoDistancia = costoPorGalon.multiply(distanciaTotal);
+
+        return costoDistancia.add(driver.getCostoActivacion());
     }
 
     private Pedido obtenerPedidoPorId(Integer pedidoId) {
@@ -89,8 +119,5 @@ public class OrderDetailsService implements IOrderDetailsService {
         return driverRepo.findById(driverId)
                 .orElseThrow(() -> new RuntimeException("Conductor no encontrado"));
     }
-
-    private BigDecimal calcularCostoTotal(BigDecimal costoDistancia, BigDecimal costoActivacion) {
-        return costoDistancia.add(costoActivacion);
-    }
 }
+
