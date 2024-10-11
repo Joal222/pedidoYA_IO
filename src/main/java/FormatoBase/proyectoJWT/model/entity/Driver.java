@@ -28,8 +28,11 @@ public class Driver extends BaseEntity {
     @Column(name = "marca")
     private String marca;
 
-    @Column(name = "limite_capacidad")
-    private float limiteCapacidad;
+    @Column(name = "limite_capacidad_peso_kg")
+    private Float limiteCapacidadKg;
+
+    @Column(name = "limite_capacidad_dimension_m3")
+    private Float limiteCapacidadM3;
 
     @Column(name = "latitud")
     private Double latitud;

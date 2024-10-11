@@ -1,11 +1,8 @@
 package FormatoBase.proyectoJWT.controller;
 
-import FormatoBase.proyectoJWT.model.dto.Solver.OptimalRouteRequest;
-import FormatoBase.proyectoJWT.model.dto.Solver.OptimalRouteResponse;
-import FormatoBase.proyectoJWT.model.dto.Solver.OrderCostRequest;
-import FormatoBase.proyectoJWT.model.dto.Solver.OrderCostResponse;
+import FormatoBase.proyectoJWT.model.dto.Solver.*;
+import FormatoBase.proyectoJWT.model.entity.Driver;
 import FormatoBase.proyectoJWT.model.entity.Pedido;
-import FormatoBase.proyectoJWT.model.entity.PedidoProducto;
 import FormatoBase.proyectoJWT.model.entity.ProveedorProducto;
 import FormatoBase.proyectoJWT.model.entity.Proveedores;
 import FormatoBase.proyectoJWT.service.*;
@@ -20,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/order-details")
@@ -79,11 +77,26 @@ public class OrderDetailsController {
 
             BigDecimal[][] costos = orderDetailsService.obtenerCostos(pedidos, proveedores, request.getProductoId(), null);  // Puedes ajustar el driverId si es necesario
 
+            List<Driver> conductoresAsignados = orderDetailsService.asignarDrivers(pedidos, proveedores, request.getProductoId());
+
+            List<DriverDto> conductoresAsignadosDto = conductoresAsignados.stream()
+                    .map(driver -> DriverDto.builder()
+                            .driverId(driver.getId())
+                            .modeloVehiculo(driver.getModelo())
+                            .limiteCapacidadKg(driver.getLimiteCapacidadKg())
+                            .limiteCapacidadM3(driver.getLimiteCapacidadM3())
+                            .costoActivacion(driver.getCostoActivacion())
+                            .build())
+                    .collect(Collectors.toList());
+
             OptimalRouteResponse optimalRouteResponse = rutaOptimaSolver.resolverRutas(demanda, oferta, costos);
+
+            optimalRouteResponse.setConductoresAsignados(conductoresAsignadosDto);
 
             return ResponseEntity.ok(optimalRouteResponse);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 }

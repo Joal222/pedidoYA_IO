@@ -11,8 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OptimalRouteRequest implements Serializable {
-    private List<PedidoDemandaDto> pedidos;
-    private List<ProveedorOfertaDto> proveedores;
     private Integer productoId;
 }
 

@@ -1,5 +1,6 @@
 package FormatoBase.proyectoJWT.model.dto.Solver;
 
+import FormatoBase.proyectoJWT.model.entity.Driver;
 import lombok.*;
 
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.util.List;
 public class OptimalRouteResponse implements Serializable {
     private List<AsignacionDto> asignaciones;
     private BigDecimal costoTotal;
+    private List<DriverDto> conductoresAsignados;
 }
 
 
