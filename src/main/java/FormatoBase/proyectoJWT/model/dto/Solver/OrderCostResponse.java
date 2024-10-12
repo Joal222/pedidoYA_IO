@@ -1,4 +1,4 @@
-package FormatoBase.proyectoJWT.model.dto;
+package FormatoBase.proyectoJWT.model.dto.Solver;
 
 import lombok.*;
 

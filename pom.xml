@@ -96,6 +96,11 @@
 			<artifactId>jackson-annotations</artifactId>
 			<version>2.18.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.choco-solver</groupId>
+			<artifactId>choco-solver</artifactId>
+			<version>4.10.17</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
