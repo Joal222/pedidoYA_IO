@@ -9,10 +9,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import FormatoBase.proyectoJWT.model.dto.Solver.AsignacionDto;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RutaOptimaSolver implements IRutaOptimaSolver {
 
+    @Transactional
     @Override
     public OptimalRouteResponse resolverRutas(int[] demanda, int[] oferta, BigDecimal[][] costos) {
         Model model = new Model("Optimización de rutas");

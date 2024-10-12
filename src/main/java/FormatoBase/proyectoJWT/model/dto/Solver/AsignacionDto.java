@@ -11,8 +11,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AsignacionDto implements Serializable {
-    private Integer pedidoId;
-    private Integer proveedorId;
-    private Integer cantidadAsignada;
+    private Integer pedidoId;//Cliente Id
+    private Integer proveedorId;//Proveedor Id
+    private Integer cantidadAsignada; //Cantidad de producto
     private BigDecimal costoTransporte;
 }

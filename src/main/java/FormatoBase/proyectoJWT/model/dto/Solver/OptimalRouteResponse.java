@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OptimalRouteResponse implements Serializable {
     private List<AsignacionDto> asignaciones;
-    private BigDecimal costoTotal;
+    private BigDecimal costoTotal;//Función objetivo
     private List<DriverDto> conductoresAsignados;
 }
 

@@ -7,6 +7,7 @@ import FormatoBase.proyectoJWT.model.repository.ProveedorProductoRepository;
 import FormatoBase.proyectoJWT.service.IOrderDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class OrderDetailsService implements IOrderDetailsService {
     @Autowired
     private DriverRepository driverRepo;
 
+    @Transactional
     @Override
     public BigDecimal calcularCostoPedido(Integer pedidoId, Integer productoId, Integer driverId) {
         Pedido pedido = obtenerPedidoPorId(pedidoId);
@@ -38,6 +40,7 @@ public class OrderDetailsService implements IOrderDetailsService {
         return calcularCostoPorDistancia(distanciaTotal, driver);
     }
 
+    @Transactional
     @Override
     public BigDecimal obtenerDistanciaEnKm(Integer pedidoId, Integer productoId, Integer driverId) {
         Pedido pedido = obtenerPedidoPorId(pedidoId);
@@ -47,6 +50,7 @@ public class OrderDetailsService implements IOrderDetailsService {
         return calcularDistanciaEntreEntidades(driver, proveedor, pedido);
     }
 
+    @Transactional
     @Override
     public int[] obtenerDemanda(List<Pedido> pedidos, Integer productoId) {
         return pedidos.stream()
@@ -57,6 +61,7 @@ public class OrderDetailsService implements IOrderDetailsService {
                 .toArray();
     }
 
+    @Transactional
     @Override
     public int[] obtenerOferta(List<Proveedores> proveedores, Integer productoId) {
         return proveedores.stream()
@@ -67,6 +72,7 @@ public class OrderDetailsService implements IOrderDetailsService {
                 .toArray();
     }
 
+    @Transactional
     @Override
     public BigDecimal[][] obtenerCostos(List<Pedido> pedidos, List<Proveedores> proveedores, Integer productoId, Integer driverId) {
         BigDecimal[][] costos = new BigDecimal[proveedores.size()][pedidos.size()];
@@ -83,14 +89,14 @@ public class OrderDetailsService implements IOrderDetailsService {
         return costos;
     }
 
+    @Transactional
     @Override
     public List<Driver> asignarDrivers(List<Pedido> pedidos, List<Proveedores> proveedores, Integer productoId) {
         List<Driver> conductoresAsignados = new ArrayList<>();
         List<Driver> driversDisponibles = driverRepo.findAll(); // Obtenemos los conductores disponibles en el momento
 
         for (Pedido pedido : pedidos) {
-            // Suma el peso y volumen total de los productos del pedido
-            float pesoTotal = (float) pedido.getPedidoProductoList().stream()
+            float pesoTotal = (float) pedido.getPedidoProductoList().stream()// Suma el peso y volumen total de los productos del pedido
                     .filter(pp -> pp.getIdProducto().getId().equals(productoId))
                     .mapToDouble(pp -> pp.getIdProducto().getPesoKg() * pp.getCantidad())
                     .sum();
@@ -100,8 +106,7 @@ public class OrderDetailsService implements IOrderDetailsService {
                     .mapToDouble(pp -> pp.getIdProducto().getDimensionM3() * pp.getCantidad())
                     .sum();
 
-            // Filtrar conductores que puedan manejar el peso y volumen del producto
-            List<Driver> conductoresElegibles = driversDisponibles.stream()
+            List<Driver> conductoresElegibles = driversDisponibles.stream()// Filtrar conductores que puedan manejar el peso y volumen del producto
                     .filter(driver -> driver.getLimiteCapacidadKg() >= pesoTotal &&
                             driver.getLimiteCapacidadM3() >= volumenTotal)
                     .collect(Collectors.toList());
@@ -110,26 +115,23 @@ public class OrderDetailsService implements IOrderDetailsService {
                 throw new RuntimeException("No hay conductores con capacidad suficiente para manejar el pedido.");
             }
 
-            // Asignar el conductor más cercano
-            Driver conductorAsignado = asignarConductorCercano(conductoresElegibles, proveedores, pedido);
+            Driver conductorAsignado = asignarConductorCercano(conductoresElegibles, proveedores, pedido);// Asignar el conductor más cercano
             conductoresAsignados.add(conductorAsignado);
 
-            // Eliminar conductor del listado disponible para evitar sobreasignaciones
-            driversDisponibles.remove(conductorAsignado);
+            driversDisponibles.remove(conductorAsignado);  // Eliminar conductor del listado disponible para evitar sobreasignaciones
         }
 
         return conductoresAsignados;
     }
 
+    @Transactional
     @Override
     public Driver asignarConductorCercano(List<Driver> conductoresElegibles, List<Proveedores> proveedores, Pedido pedido) {
-        // Lógica para seleccionar el conductor más cercano
-        Driver mejorConductor = null;
+        Driver mejorConductor = null;// Lógica para seleccionar el conductor más cercano
         BigDecimal distanciaMinima = BigDecimal.valueOf(Double.MAX_VALUE);
 
         for (Driver conductor : conductoresElegibles) {
-            // Calcular distancia entre el conductor y el proveedor más cercano
-            for (Proveedores proveedor : proveedores) {
+            for (Proveedores proveedor : proveedores) { // Calcular distancia entre el conductor y el proveedor más cercano
                 BigDecimal distanciaConductorAProveedor = googleMapsService.calcularDistancia(
                         conductor.getLatitud(), conductor.getLongitud(),
                         proveedor.getLatitud(), proveedor.getLongitud());
