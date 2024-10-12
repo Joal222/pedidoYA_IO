@@ -59,7 +59,8 @@ public class DriverController {
             .id(driver.getId())
             .modelo(driver.getModelo())
             .marca(driver.getMarca())
-            .limiteCapacidad(driver.getLimiteCapacidad())
+            .limiteCapacidadM3(driver.getLimiteCapacidadM3())
+            .limiteCapacidadKg(driver.getLimiteCapacidadKg())
             .latitud(driver.getLatitud())
             .longitud(driver.getLongitud())
             .costoActivacion(driver.getCostoActivacion())
@@ -97,7 +98,8 @@ public class DriverController {
       Driver driver = new Driver();
       driver.setModelo(driverDTO.getModelo());
       driver.setMarca(driverDTO.getMarca());
-      driver.setLimiteCapacidad(driverDTO.getLimiteCapacidad());
+      driver.setLimiteCapacidadM3(driverDTO.getLimiteCapacidadM3());
+      driver.setLimiteCapacidadKg(driverDTO.getLimiteCapacidadKg());
       driver.setLatitud(driverDTO.getLatitud());
       driver.setLongitud(driverDTO.getLongitud());
       driver.setCostoActivacion(driverDTO.getCostoActivacion());
