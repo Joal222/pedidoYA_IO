@@ -1,5 +1,7 @@
 package FormatoBase.proyectoJWT.service;
 
+import java.math.BigDecimal;
+
 public interface IGoogleMapsService {
-    Integer calcularDistancia(Double latitudOrigen, Double longitudOrigen, Double latitudDestino, Double longitudDestino);
+    BigDecimal calcularDistancia(Double latitudOrigen, Double longitudOrigen, Double latitudDestino, Double longitudDestino);
 }

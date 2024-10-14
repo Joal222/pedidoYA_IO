@@ -20,7 +20,11 @@ public class DriverDto {
   private String marca;
 
   @NotNull(message = "El límite de capacidad es obligatorio")
-  private float limiteCapacidad;
+  private float limiteCapacidadM3;
+
+  @NotNull(message = "El límite de capacidad es obligatorio")
+  private float limiteCapacidadKg;
+
 
   @NotNull(message = "La latitud es obligatoria")
   private Double latitud;

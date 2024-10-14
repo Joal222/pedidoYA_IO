@@ -36,7 +36,7 @@ public class ProveedorProductoImpl implements CrudServiceProcessingController<Pr
     @Transactional(readOnly = true)
     @Override
     public List<ProveedorProducto> findAll() {
-        return null;
+        return (List<ProveedorProducto>) proveedorProductoRepo.findAll();
     }
 
     @Transactional
