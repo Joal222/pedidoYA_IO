@@ -98,9 +98,11 @@ public class OrderDetailsService implements IOrderDetailsService {
 
             for (int i = 0; i < proveedores.size(); i++) {
                 Proveedores proveedor = proveedores.get(i);
+                int proveedorIdIncrementado = proveedor.getId() + 1;  // Incrementa el ID del proveedor
+
                 for (int j = 0; j < pedidos.size(); j++) {
                     Pedido pedido = pedidos.get(j);
-                    Driver conductorAsignado = conductoresAsignados.get(j);
+                    Driver conductorAsignado = conductoresAsignados.get(0);  // Solo un conductor asignado
                     BigDecimal distanciaTotal = calcularDistanciaEntreEntidades(conductorAsignado, proveedor, pedido);
                     costos[i][j] = calcularCostoPorDistancia(distanciaTotal, conductorAsignado);
                 }
@@ -118,31 +120,32 @@ public class OrderDetailsService implements IOrderDetailsService {
         try {
             List<Driver> driversDisponibles = driverRepo.findAll();
 
-            for (Pedido pedido : pedidos) {
-                float pesoTotal = (float) pedido.getPedidoProductoList().stream()
-                        .filter(pp -> pp.getIdProducto().getId().equals(productoId))
-                        .mapToDouble(pp -> pp.getIdProducto().getPesoKg() * pp.getCantidad())
-                        .sum();
+            // Calcular el peso total y volumen total de todos los pedidos
+            final float pesoTotal = (float) pedidos.stream()
+                    .flatMap(pedido -> pedido.getPedidoProductoList().stream())
+                    .filter(pp -> pp.getIdProducto().getId().equals(productoId))
+                    .mapToDouble(pp -> pp.getIdProducto().getPesoKg() * pp.getCantidad())
+                    .sum();
 
-                float volumenTotal = (float) pedido.getPedidoProductoList().stream()
-                        .filter(pp -> pp.getIdProducto().getId().equals(productoId))
-                        .mapToDouble(pp -> pp.getIdProducto().getDimensionM3() * pp.getCantidad())
-                        .sum();
+            final float volumenTotal = (float) pedidos.stream()
+                    .flatMap(pedido -> pedido.getPedidoProductoList().stream())
+                    .filter(pp -> pp.getIdProducto().getId().equals(productoId))
+                    .mapToDouble(pp -> pp.getIdProducto().getDimensionM3() * pp.getCantidad())
+                    .sum();
 
-                List<Driver> conductoresElegibles = driversDisponibles.stream()
-                        .filter(driver -> driver.getLimiteCapacidadKg() >= pesoTotal &&
-                                driver.getLimiteCapacidadM3() >= volumenTotal)
-                        .collect(Collectors.toList());
+            // Filtrar los conductores elegibles en base al peso total y volumen total
+            List<Driver> conductoresElegibles = driversDisponibles.stream()
+                    .filter(driver -> driver.getLimiteCapacidadKg() >= pesoTotal &&
+                            driver.getLimiteCapacidadM3() >= volumenTotal)
+                    .collect(Collectors.toList());
 
-                if (conductoresElegibles.isEmpty()) {
-                    throw new ServiceException("No hay conductores con capacidad suficiente para manejar el pedido.");
-                }
-
-                Driver conductorAsignado = asignarConductorCercano(conductoresElegibles, proveedores, pedido);
-                conductoresAsignados.add(conductorAsignado);
-
-                driversDisponibles.remove(conductorAsignado);
+            if (conductoresElegibles.isEmpty()) {
+                throw new ServiceException("No hay conductores con capacidad suficiente para manejar todos los pedidos.");
             }
+
+            // Asignar el conductor más cercano
+            Driver conductorAsignado = asignarConductorCercano(conductoresElegibles, proveedores, pedidos.get(0));
+            conductoresAsignados.add(conductorAsignado);
 
             return conductoresAsignados;
         } catch (Exception e) {
