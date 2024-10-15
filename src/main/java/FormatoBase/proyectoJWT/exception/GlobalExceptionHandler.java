@@ -1,5 +1,6 @@
 package FormatoBase.proyectoJWT.exception;
 
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -31,11 +32,31 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
   }
 
-  // Puedes agregar más métodos para manejar otras excepciones
-  // Por ejemplo, manejar excepciones genéricas
+  // Manejar excepciones personalizadas de servicio (ServiceException)
+  @ExceptionHandler(ServiceException.class)
+  public ResponseEntity<Map<String, String>> handleServiceException(ServiceException ex) {
+    Map<String, String> response = new HashMap<>();
+    response.put("error", "Error en la operación de servicio.");
+    response.put("detalle", ex.getMessage());
+
+    // Si deseas incluir el stack trace
+    Throwable cause = ex.getCause();
+    if (cause != null) {
+      response.put("causa", cause.toString());
+    }
+
+    // Devolver el error en formato JSON
+    return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  // Manejar excepciones genéricas
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<String> handleGlobalException(Exception ex) {
-    // Devolver un mensaje genérico de error en formato JSON
-    return new ResponseEntity<>("Error interno del sistema: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+  public ResponseEntity<Map<String, String>> handleGlobalException(Exception ex) {
+    Map<String, String> response = new HashMap<>();
+    response.put("error", "Error interno del sistema.");
+    response.put("detalle", ex.getMessage());
+
+    // Devolver el error en formato JSON
+    return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

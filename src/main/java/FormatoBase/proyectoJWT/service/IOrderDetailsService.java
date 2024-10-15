@@ -13,7 +13,7 @@ public interface IOrderDetailsService {
 
     int[] obtenerDemanda(List<Pedido> pedidos, Integer productoId);
     int[] obtenerOferta(List<Proveedores> proveedores, Integer productoId);
-    BigDecimal[][] obtenerCostos(List<Pedido> pedidos, List<Proveedores> proveedores, Integer productoId, Integer driverId);
+    BigDecimal[][] obtenerCostos(List<Pedido> pedidos, List<Proveedores> proveedores, Integer productoId);
 
     List<Driver> asignarDrivers(List<Pedido> pedidos, List<Proveedores> proveedores, Integer productoId);
     Driver asignarConductorCercano(List<Driver> conductoresElegibles, List<Proveedores> proveedores, Pedido pedido);

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DriverDto {
+public class DriverDtoSolver {
     private Integer driverId;
     private String nombre;
     private String modeloVehiculo;
