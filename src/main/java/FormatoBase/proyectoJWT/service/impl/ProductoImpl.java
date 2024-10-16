@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class  ProductoImpl implements CrudServiceProcessingController<Productos,Integer> {
@@ -44,5 +45,14 @@ public class  ProductoImpl implements CrudServiceProcessingController<Productos,
     @Override
     public void delete(Productos productos) {
         productosRepo.delete(productos);
+    }
+
+    // Nuevo método para obtener productos con pedidos
+    @Transactional(readOnly = true)
+    public List<Productos> obtenerProductosConPedidos() {
+        return productosRepo.findAll().stream()
+                .filter(producto -> producto.getPedidoProductoList().stream()
+                        .anyMatch(pedidoProducto -> pedidoProducto.getIdPedido().getIdEstado().getId() == 1)) // Filtrar productos con pedidos en estado 1
+                .collect(Collectors.toList());
     }
 }

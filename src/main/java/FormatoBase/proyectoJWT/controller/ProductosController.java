@@ -1,12 +1,15 @@
 package FormatoBase.proyectoJWT.controller;
 
+import FormatoBase.proyectoJWT.model.dto.PedidoDto;
 import FormatoBase.proyectoJWT.model.dto.ProductoDto;
+import FormatoBase.proyectoJWT.model.dto.ProductoPedidoDto;
 import FormatoBase.proyectoJWT.model.dto.ProveedorProductoDto;
 import FormatoBase.proyectoJWT.model.entity.Productos;
 import FormatoBase.proyectoJWT.model.entity.ProveedorProducto;
 import FormatoBase.proyectoJWT.model.entity.Proveedores;
 import FormatoBase.proyectoJWT.model.entity.TipoProducto;
 import FormatoBase.proyectoJWT.service.CrudServiceProcessingController;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/productos")
@@ -131,9 +135,40 @@ public class ProductosController {
         }
     }
 
+    // Método para obtener productos con pedidos usando DTOs
+    @GetMapping("/get/listProductoPedido")
+    public List<ProductoPedidoDto> obtenerProductosConPedidos() {
+        return productosService.findAll().stream()
+                .filter(producto -> !producto.getPedidoProductoList().isEmpty()) // Filtrar productos con pedidos
+                .map(this::convertirProductoADTO) // Convertir cada producto en un ProductoConPedidosDTO
+                .collect(Collectors.toList());
+    }
 
+    private ProductoPedidoDto convertirProductoADTO(Productos producto) {
+        ProductoPedidoDto productoDTO = new ProductoPedidoDto();
+        productoDTO.setId(producto.getId());
+        productoDTO.setNombreProducto(producto.getNombreProducto());
 
+        // Convertir la lista de pedidos asociados a un producto
+        List<PedidoDto> pedidosDTO = producto.getPedidoProductoList().stream()
+                .filter(pedidoProducto -> pedidoProducto.getIdPedido().getIdEstado().getId() == 1) // Filtrar pedidos en estado 1
+                .map(pedidoProducto ->  {
+                    PedidoDto pedidoDTO = new PedidoDto();
+                    pedidoDTO.setId(pedidoProducto.getIdPedido().getId());
+                    pedidoDTO.setClientePedido(pedidoProducto.getIdPedido().getClientePedido());
+                    pedidoDTO.setIdEstado(pedidoProducto.getIdPedido().getIdEstado().getId());
+                    pedidoDTO.setClientePedido(pedidoProducto.getIdPedido().getClientePedido());
+                    pedidoDTO.setTelefonoPedido(pedidoProducto.getIdPedido().getTelefonoPedido());
+                    pedidoDTO.setFechaCreacion(pedidoProducto.getIdPedido().getFechaCreacion());
+                    pedidoDTO.setLatitud(pedidoProducto.getIdPedido().getLatitud());
+                    pedidoDTO.setLongitud(pedidoProducto.getIdPedido().getLongitud());
+                    pedidoDTO.setDireccionEntrega(pedidoProducto.getIdPedido().getDireccionEntrega());
 
+                    return pedidoDTO;
+                })
+                .collect(Collectors.toList());
 
-
+        productoDTO.setPedidos(pedidosDTO);
+        return productoDTO;
+    }
 }
