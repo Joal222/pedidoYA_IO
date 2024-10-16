@@ -5,6 +5,7 @@ import FormatoBase.proyectoJWT.model.repository.DriverRepository;
 import FormatoBase.proyectoJWT.model.repository.PedidoRepository;
 import FormatoBase.proyectoJWT.model.repository.ProveedorProductoRepository;
 import FormatoBase.proyectoJWT.service.IOrderDetailsService;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,157 +33,194 @@ public class OrderDetailsService implements IOrderDetailsService {
     @Transactional
     @Override
     public BigDecimal calcularCostoPedido(Integer pedidoId, Integer productoId, Integer driverId) {
-        Pedido pedido = obtenerPedidoPorId(pedidoId);
-        Proveedores proveedor = obtenerProveedorPorProducto(productoId);
-        Driver driver = obtenerDriverPorId(driverId);
+        try {
+            Pedido pedido = obtenerPedidoPorId(pedidoId);
+            Proveedores proveedor = obtenerProveedorPorProducto(productoId);
+            Driver driver = obtenerDriverPorId(driverId);
 
-        BigDecimal distanciaTotal = calcularDistanciaEntreEntidades(driver, proveedor, pedido);
-        return calcularCostoPorDistancia(distanciaTotal, driver);
+            BigDecimal distanciaTotal = calcularDistanciaEntreEntidades(driver, proveedor, pedido);
+            return calcularCostoPorDistancia(distanciaTotal, driver);
+        } catch (Exception e) {
+            throw new ServiceException("Error al calcular el costo del pedido.", e);
+        }
     }
 
     @Transactional
     @Override
     public BigDecimal obtenerDistanciaEnKm(Integer pedidoId, Integer productoId, Integer driverId) {
-        Pedido pedido = obtenerPedidoPorId(pedidoId);
-        Proveedores proveedor = obtenerProveedorPorProducto(productoId);
-        Driver driver = obtenerDriverPorId(driverId);
+        try {
+            Pedido pedido = obtenerPedidoPorId(pedidoId);
+            Proveedores proveedor = obtenerProveedorPorProducto(productoId);
+            Driver driver = obtenerDriverPorId(driverId);
 
-        return calcularDistanciaEntreEntidades(driver, proveedor, pedido);
+            return calcularDistanciaEntreEntidades(driver, proveedor, pedido);
+        } catch (Exception e) {
+            throw new ServiceException("Error al obtener la distancia en km.", e);
+        }
     }
 
     @Transactional
     @Override
     public int[] obtenerDemanda(List<Pedido> pedidos, Integer productoId) {
-        return pedidos.stream()
-                .mapToInt(pedido -> pedido.getPedidoProductoList().stream()
-                        .filter(pp -> pp.getIdProducto().getId().equals(productoId))
-                        .mapToInt(PedidoProducto::getCantidad)
-                        .sum())
-                .toArray();
+        try {
+            return pedidos.stream()
+                    .mapToInt(pedido -> pedido.getPedidoProductoList().stream()
+                            .filter(pp -> pp.getIdProducto().getId().equals(productoId))
+                            .mapToInt(PedidoProducto::getCantidad)
+                            .sum())
+                    .toArray();
+        } catch (Exception e) {
+            throw new ServiceException("Error al obtener la demanda del producto.", e);
+        }
     }
 
     @Transactional
     @Override
     public int[] obtenerOferta(List<Proveedores> proveedores, Integer productoId) {
-        return proveedores.stream()
-                .mapToInt(proveedor -> proveedor.getProveedorProductoList().stream()
-                        .filter(pp -> pp.getIdProducto().getId().equals(productoId))
-                        .mapToInt(ProveedorProducto::getDisponibilidad)
-                        .sum())
-                .toArray();
+        try {
+            return proveedores.stream()
+                    .mapToInt(proveedor -> proveedor.getProveedorProductoList().stream()
+                            .filter(pp -> pp.getIdProducto().getId().equals(productoId))
+                            .mapToInt(ProveedorProducto::getDisponibilidad)
+                            .sum())
+                    .toArray();
+        } catch (Exception e) {
+            throw new ServiceException("Error al obtener la oferta del producto.", e);
+        }
     }
 
     @Transactional
     @Override
-    public BigDecimal[][] obtenerCostos(List<Pedido> pedidos, List<Proveedores> proveedores, Integer productoId, Integer driverId) {
-        BigDecimal[][] costos = new BigDecimal[proveedores.size()][pedidos.size()];
+    public BigDecimal[][] obtenerCostos(List<Pedido> pedidos, List<Proveedores> proveedores, Integer productoId) {
+        try {
+            List<Driver> conductoresAsignados = asignarDrivers(pedidos, proveedores, productoId);
+            BigDecimal[][] costos = new BigDecimal[proveedores.size()][pedidos.size()];
 
-        for (int i = 0; i < proveedores.size(); i++) {
-            Proveedores proveedor = proveedores.get(i);
-            for (int j = 0; j < pedidos.size(); j++) {
-                Pedido pedido = pedidos.get(j);
-                BigDecimal distanciaTotal = calcularDistanciaEntreEntidades(driverRepo.findById(driverId).get(), proveedor, pedido);
-                costos[i][j] = calcularCostoPorDistancia(distanciaTotal, driverRepo.findById(driverId).get());
+            for (int i = 0; i < proveedores.size(); i++) {
+                Proveedores proveedor = proveedores.get(i);
+                int proveedorIdIncrementado = proveedor.getId() + 1;  // Incrementa el ID del proveedor
+
+                for (int j = 0; j < pedidos.size(); j++) {
+                    Pedido pedido = pedidos.get(j);
+                    Driver conductorAsignado = conductoresAsignados.get(0);  // Solo un conductor asignado
+                    BigDecimal distanciaTotal = calcularDistanciaEntreEntidades(conductorAsignado, proveedor, pedido);
+                    costos[i][j] = calcularCostoPorDistancia(distanciaTotal, conductorAsignado);
+                }
             }
+            return costos;
+        } catch (Exception e) {
+            throw new ServiceException("Error al obtener los costos.", e);
         }
-
-        return costos;
     }
 
     @Transactional
     @Override
     public List<Driver> asignarDrivers(List<Pedido> pedidos, List<Proveedores> proveedores, Integer productoId) {
         List<Driver> conductoresAsignados = new ArrayList<>();
-        List<Driver> driversDisponibles = driverRepo.findAll(); // Obtenemos los conductores disponibles en el momento
+        try {
+            List<Driver> driversDisponibles = driverRepo.findAll();
 
-        for (Pedido pedido : pedidos) {
-            float pesoTotal = (float) pedido.getPedidoProductoList().stream()// Suma el peso y volumen total de los productos del pedido
+            // Calcular el peso total y volumen total de todos los pedidos
+            final float pesoTotal = (float) pedidos.stream()
+                    .flatMap(pedido -> pedido.getPedidoProductoList().stream())
                     .filter(pp -> pp.getIdProducto().getId().equals(productoId))
                     .mapToDouble(pp -> pp.getIdProducto().getPesoKg() * pp.getCantidad())
                     .sum();
 
-            float volumenTotal = (float) pedido.getPedidoProductoList().stream()
+            final float volumenTotal = (float) pedidos.stream()
+                    .flatMap(pedido -> pedido.getPedidoProductoList().stream())
                     .filter(pp -> pp.getIdProducto().getId().equals(productoId))
                     .mapToDouble(pp -> pp.getIdProducto().getDimensionM3() * pp.getCantidad())
                     .sum();
 
-            List<Driver> conductoresElegibles = driversDisponibles.stream()// Filtrar conductores que puedan manejar el peso y volumen del producto
+            // Filtrar los conductores elegibles en base al peso total y volumen total
+            List<Driver> conductoresElegibles = driversDisponibles.stream()
                     .filter(driver -> driver.getLimiteCapacidadKg() >= pesoTotal &&
                             driver.getLimiteCapacidadM3() >= volumenTotal)
                     .collect(Collectors.toList());
 
             if (conductoresElegibles.isEmpty()) {
-                throw new RuntimeException("No hay conductores con capacidad suficiente para manejar el pedido.");
+                throw new ServiceException("No hay conductores con capacidad suficiente para manejar todos los pedidos.");
             }
 
-            Driver conductorAsignado = asignarConductorCercano(conductoresElegibles, proveedores, pedido);// Asignar el conductor más cercano
+            // Asignar el conductor más cercano
+            Driver conductorAsignado = asignarConductorCercano(conductoresElegibles, proveedores, pedidos.get(0));
             conductoresAsignados.add(conductorAsignado);
 
-            driversDisponibles.remove(conductorAsignado);  // Eliminar conductor del listado disponible para evitar sobreasignaciones
+            return conductoresAsignados;
+        } catch (Exception e) {
+            throw new ServiceException("Error al asignar conductores.", e);
         }
-
-        return conductoresAsignados;
     }
 
     @Transactional
     @Override
     public Driver asignarConductorCercano(List<Driver> conductoresElegibles, List<Proveedores> proveedores, Pedido pedido) {
-        Driver mejorConductor = null;// Lógica para seleccionar el conductor más cercano
-        BigDecimal distanciaMinima = BigDecimal.valueOf(Double.MAX_VALUE);
+        try {
+            Driver mejorConductor = null;
+            BigDecimal distanciaMinima = BigDecimal.valueOf(Double.MAX_VALUE);
 
-        for (Driver conductor : conductoresElegibles) {
-            for (Proveedores proveedor : proveedores) { // Calcular distancia entre el conductor y el proveedor más cercano
-                BigDecimal distanciaConductorAProveedor = googleMapsService.calcularDistancia(
-                        conductor.getLatitud(), conductor.getLongitud(),
-                        proveedor.getLatitud(), proveedor.getLongitud());
+            for (Driver conductor : conductoresElegibles) {
+                for (Proveedores proveedor : proveedores) {
+                    BigDecimal distanciaConductorAProveedor = googleMapsService.calcularDistancia(
+                            conductor.getLatitud(), conductor.getLongitud(),
+                            proveedor.getLatitud(), proveedor.getLongitud());
 
-                if (distanciaConductorAProveedor.compareTo(distanciaMinima) < 0) {
-                    distanciaMinima = distanciaConductorAProveedor;
-                    mejorConductor = conductor;
+                    if (distanciaConductorAProveedor.compareTo(distanciaMinima) < 0) {
+                        distanciaMinima = distanciaConductorAProveedor;
+                        mejorConductor = conductor;
+                    }
                 }
             }
-        }
 
-        return mejorConductor;
+            return mejorConductor;
+        } catch (Exception e) {
+            throw new ServiceException("Error al asignar el conductor más cercano.", e);
+        }
     }
 
     private BigDecimal calcularDistanciaEntreEntidades(Driver driver, Proveedores proveedor, Pedido pedido) {
-        BigDecimal distanciaDriverAProveedor = googleMapsService.calcularDistancia(
-                driver.getLatitud(), driver.getLongitud(),
-                proveedor.getLatitud(), proveedor.getLongitud()
-        );
+        try {
+            BigDecimal distanciaDriverAProveedor = googleMapsService.calcularDistancia(
+                    driver.getLatitud(), driver.getLongitud(),
+                    proveedor.getLatitud(), proveedor.getLongitud());
 
-        BigDecimal distanciaProveedorACliente = googleMapsService.calcularDistancia(
-                proveedor.getLatitud(), proveedor.getLongitud(),
-                Double.parseDouble(pedido.getLatitud()), Double.parseDouble(pedido.getLongitud())
-        );
+            BigDecimal distanciaProveedorACliente = googleMapsService.calcularDistancia(
+                    proveedor.getLatitud(), proveedor.getLongitud(),
+                    Double.parseDouble(pedido.getLatitud()), Double.parseDouble(pedido.getLongitud()));
 
-        return distanciaDriverAProveedor.add(distanciaProveedorACliente);
+            return distanciaDriverAProveedor.add(distanciaProveedorACliente);
+        } catch (Exception e) {
+            throw new ServiceException("Error al calcular la distancia entre las entidades.", e);
+        }
     }
 
     private BigDecimal calcularCostoPorDistancia(BigDecimal distanciaTotal, Driver driver) {
-        BigDecimal precioCombustible = driver.getIdTipoCombustible().getPrecio();
-        BigDecimal rendimientoGalon = driver.getRendimientoGalon();
-        BigDecimal costoPorGalon = precioCombustible.divide(rendimientoGalon, BigDecimal.ROUND_HALF_UP);
-        BigDecimal costoDistancia = costoPorGalon.multiply(distanciaTotal);
+        try {
+            BigDecimal precioCombustible = driver.getIdTipoCombustible().getPrecio();
+            BigDecimal rendimientoGalon = driver.getRendimientoGalon();
+            BigDecimal costoPorGalon = precioCombustible.divide(rendimientoGalon, BigDecimal.ROUND_HALF_UP);
+            BigDecimal costoDistancia = costoPorGalon.multiply(distanciaTotal);
 
-        return costoDistancia.add(driver.getCostoActivacion());
+            return costoDistancia.add(driver.getCostoActivacion());
+        } catch (Exception e) {
+            throw new ServiceException("Error al calcular el costo por distancia.", e);
+        }
     }
 
     private Pedido obtenerPedidoPorId(Integer pedidoId) {
         return pedidoRepo.findById(pedidoId)
-                .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+                .orElseThrow(() -> new ServiceException("Pedido no encontrado"));
     }
 
     private Proveedores obtenerProveedorPorProducto(Integer productoId) {
         ProveedorProducto proveedorProducto = proveedorProductoRepo.findByIdProductoId(productoId)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado en ningún proveedor"));
+                .orElseThrow(() -> new ServiceException("Producto no encontrado en ningún proveedor"));
         return proveedorProducto.getIdProveedor();
     }
 
     private Driver obtenerDriverPorId(Integer driverId) {
         return driverRepo.findById(driverId)
-                .orElseThrow(() -> new RuntimeException("Conductor no encontrado"));
+                .orElseThrow(() -> new ServiceException("Conductor no encontrado"));
     }
 }
-

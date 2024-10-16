@@ -76,12 +76,12 @@ public class OrderDetailsController {
             int[] demanda = orderDetailsService.obtenerDemanda(pedidos, request.getProductoId());
             int[] oferta = orderDetailsService.obtenerOferta(proveedores, request.getProductoId());
 
-            BigDecimal[][] costos = orderDetailsService.obtenerCostos(pedidos, proveedores, request.getProductoId(), null);  // Puedes ajustar el driverId si es necesario
+            BigDecimal[][] costos = orderDetailsService.obtenerCostos(pedidos, proveedores, request.getProductoId());  // Puedes ajustar el driverId si es necesario
 
             List<Driver> conductoresAsignados = orderDetailsService.asignarDrivers(pedidos, proveedores, request.getProductoId());
 
-            List<DriverDto> conductoresAsignadosDto = conductoresAsignados.stream()
-                    .map(driver -> DriverDto.builder()
+            List<DriverDtoSolver> conductoresAsignadosDto = conductoresAsignados.stream()
+                    .map(driver -> DriverDtoSolver.builder()
                             .driverId(driver.getId())
                             .modeloVehiculo(driver.getModelo())
                             .limiteCapacidadKg(driver.getLimiteCapacidadKg())
