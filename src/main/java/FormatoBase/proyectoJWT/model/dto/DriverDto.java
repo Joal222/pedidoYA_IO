@@ -25,7 +25,6 @@ public class DriverDto {
   @NotNull(message = "El límite de capacidad es obligatorio")
   private float limiteCapacidadKg;
 
-
   @NotNull(message = "La latitud es obligatoria")
   private Double latitud;
 

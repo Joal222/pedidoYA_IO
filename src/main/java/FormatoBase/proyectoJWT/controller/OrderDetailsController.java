@@ -69,6 +69,7 @@ public class OrderDetailsController {
     @PostMapping("/calculate-optimal-routes")
     public ResponseEntity<OptimalRouteResponse> calcularRutasOptimas(@RequestBody OptimalRouteRequest request) {
         try {
+
             List<Pedido> pedidos = pedidoService.findAll();
             List<Proveedores> proveedores = proveedorService.findAll();
 
@@ -98,5 +99,4 @@ public class OrderDetailsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
 }
