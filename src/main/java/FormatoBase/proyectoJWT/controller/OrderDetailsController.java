@@ -1,10 +1,7 @@
 package FormatoBase.proyectoJWT.controller;
 
 import FormatoBase.proyectoJWT.model.dto.Solver.*;
-import FormatoBase.proyectoJWT.model.entity.Driver;
-import FormatoBase.proyectoJWT.model.entity.Pedido;
-import FormatoBase.proyectoJWT.model.entity.ProveedorProducto;
-import FormatoBase.proyectoJWT.model.entity.Proveedores;
+import FormatoBase.proyectoJWT.model.entity.*;
 import FormatoBase.proyectoJWT.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,6 +38,12 @@ public class OrderDetailsController {
     @Autowired
     private CrudServiceProcessingController<ProveedorProducto, Integer> proveedorProductoService;
 
+    @Autowired
+    private CrudServiceProcessingController<Estado, Integer> estadoService;
+
+    @Autowired
+    private CrudServiceProcessingController<Driver, Integer> driverService;
+
     @PostMapping("/calculate-cost")
     public ResponseEntity<OrderCostResponse> calcularCostoPedido(@RequestBody OrderCostRequest orderCostRequest) {
         try {
@@ -67,22 +70,55 @@ public class OrderDetailsController {
     }
 
     @PostMapping("/calculate-optimal-routes")
-    public ResponseEntity<OptimalRouteResponse> calcularRutasOptimas(@RequestBody OptimalRouteRequest request) {
+    public ResponseEntity<?> calcularRutasOptimas(@RequestBody OptimalRouteRequest request) {
         try {
-
             List<Pedido> pedidos = pedidoService.findAll();
             List<Proveedores> proveedores = proveedorService.findAll();
+
+            if (pedidos.isEmpty() || proveedores.isEmpty()) {
+                throw new IllegalArgumentException("No hay pedidos o proveedores disponibles.");
+            }
 
             int[] demanda = orderDetailsService.obtenerDemanda(pedidos, request.getProductoId());
             int[] oferta = orderDetailsService.obtenerOferta(proveedores, request.getProductoId());
 
-            BigDecimal[][] costos = orderDetailsService.obtenerCostos(pedidos, proveedores, request.getProductoId());  // Puedes ajustar el driverId si es necesario
+            if (demanda.length == 0 || oferta.length == 0) {
+                throw new IllegalArgumentException("No se encontró demanda u oferta para el producto solicitado.");
+            }
+
+            BigDecimal[][] costos = orderDetailsService.obtenerCostos(pedidos, proveedores, request.getProductoId());
 
             List<Driver> conductoresAsignados = orderDetailsService.asignarDrivers(pedidos, proveedores, request.getProductoId());
+
+            if (conductoresAsignados.isEmpty()) {
+                throw new IllegalArgumentException("No se pudo asignar conductores para los pedidos.");
+            }
+
+            OptimalRouteResponse optimalRouteResponse = rutaOptimaSolver.resolverRutas(demanda, oferta, costos);
+
+            optimalRouteResponse.getAsignaciones().forEach(asignacion -> {
+                asignacion.setPedidoId(asignacion.getPedidoId() + 1);
+                asignacion.setProveedorId(asignacion.getProveedorId() + 1);
+            });
+
+            if (!optimalRouteResponse.getAsignaciones().isEmpty()) {
+                pedidos.forEach(pedido -> {
+                    pedido.setIdEstado(estadoService.findById(2)); // ID 2 = "En ruta"
+                    pedidoService.save(pedido);
+                });
+
+                conductoresAsignados.forEach(driver -> {
+                    driver.setIdEstado(estadoService.findById(4)); // ID 4 = "Asignado - no disponible"
+                    driverService.save(driver);
+                });
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudieron asignar pedidos a los conductores.");
+            }
 
             List<DriverDtoSolver> conductoresAsignadosDto = conductoresAsignados.stream()
                     .map(driver -> DriverDtoSolver.builder()
                             .driverId(driver.getId())
+                            .marca(driver.getMarca())
                             .modeloVehiculo(driver.getModelo())
                             .limiteCapacidadKg(driver.getLimiteCapacidadKg())
                             .limiteCapacidadM3(driver.getLimiteCapacidadM3())
@@ -90,13 +126,14 @@ public class OrderDetailsController {
                             .build())
                     .collect(Collectors.toList());
 
-            OptimalRouteResponse optimalRouteResponse = rutaOptimaSolver.resolverRutas(demanda, oferta, costos);
-
             optimalRouteResponse.setConductoresAsignados(conductoresAsignadosDto);
 
             return ResponseEntity.ok(optimalRouteResponse);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            e.printStackTrace(); // Registrar el error para depuración
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del sistema");
         }
     }
 }

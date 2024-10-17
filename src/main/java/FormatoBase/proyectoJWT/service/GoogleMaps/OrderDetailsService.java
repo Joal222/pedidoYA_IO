@@ -98,7 +98,7 @@ public class OrderDetailsService implements IOrderDetailsService {
 
             for (int i = 0; i < proveedores.size(); i++) {
                 Proveedores proveedor = proveedores.get(i);
-                int proveedorIdIncrementado = proveedor.getId() + 1;  // Incrementa el ID del proveedor
+                //int proveedorIdIncrementado = proveedor.getId() + 1;  // Incrementa el ID del proveedor
 
                 for (int j = 0; j < pedidos.size(); j++) {
                     Pedido pedido = pedidos.get(j);
