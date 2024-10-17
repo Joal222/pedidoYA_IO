@@ -73,7 +73,7 @@ public class DriverController {
             .build();
   }
 
-  // Crear un nuevo driver con validaciones de llaves foráneas
+
   @PostMapping
   public ResponseEntity<?> createDriver(@Valid @RequestBody DriverDto driverDTO) {
     try {
@@ -87,6 +87,16 @@ public class DriverController {
       Empleado empleado = empleadoService.findById(driverDTO.getIdEmpleado());
       if (empleado == null) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El empleado no existe");
+      }
+
+      // Validar si el empleado ya tiene un driver asignado
+      List<Driver> driversExistentes = driverService.findAll(); // Obtener todos los drivers
+      boolean empleadoConDriver = driversExistentes.stream()
+              .anyMatch(driver -> driver.getIdEmpleado().getId().equals(empleado.getId()));
+
+      if (empleadoConDriver) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("El empleado ya tiene un driver asignado. No se puede asignar más de un driver por empleado.");
       }
 
       // Validar si el tipo de combustible existe
