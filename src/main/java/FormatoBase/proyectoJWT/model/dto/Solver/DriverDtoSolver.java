@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class DriverDtoSolver {
     private Integer driverId;
-    private String nombre;
+    private String marca;
     private String modeloVehiculo;
     private Float limiteCapacidadKg;
     private Float limiteCapacidadM3;

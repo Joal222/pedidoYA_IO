@@ -24,4 +24,7 @@ public class Estado extends BaseEntity{
 
     @OneToMany(mappedBy = "idEstado", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Pedido> pedidoList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "idEstado", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Driver> driverList = new ArrayList<>();
 }
