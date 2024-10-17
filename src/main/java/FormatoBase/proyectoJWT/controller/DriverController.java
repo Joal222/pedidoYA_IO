@@ -1,10 +1,7 @@
 package FormatoBase.proyectoJWT.controller;
 
 import FormatoBase.proyectoJWT.model.dto.DriverDto;
-import FormatoBase.proyectoJWT.model.entity.Driver;
-import FormatoBase.proyectoJWT.model.entity.Empleado;
-import FormatoBase.proyectoJWT.model.entity.TipoCombustible;
-import FormatoBase.proyectoJWT.model.entity.TipoVehiculo;
+import FormatoBase.proyectoJWT.model.entity.*;
 import FormatoBase.proyectoJWT.service.CrudServiceProcessingController;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +28,9 @@ public class DriverController {
 
   @Autowired
   private CrudServiceProcessingController<TipoCombustible, Integer> tipoCombustibleService;
+
+  @Autowired
+  private CrudServiceProcessingController<Estado, Integer> estadoService;
 
   // Listar todos los drivers
   @GetMapping
@@ -66,6 +66,7 @@ public class DriverController {
             .costoActivacion(driver.getCostoActivacion())
             .rendimientoGalon(driver.getRendimientoGalon())
             .direccion(driver.getDireccion())
+            .idEstado(driver.getIdEstado().getId())
             .idTipoVehiculo(driver.getIdTipoVehiculo().getId())
             .idEmpleado(driver.getIdEmpleado().getId())
             .idTipoCombustible(driver.getIdTipoCombustible().getId())
@@ -105,6 +106,8 @@ public class DriverController {
       driver.setCostoActivacion(driverDTO.getCostoActivacion());
       driver.setRendimientoGalon(driverDTO.getRendimientoGalon());
       driver.setDireccion(driverDTO.getDireccion());
+      Estado estadoInicial = estadoService.findById(3);//Crear en DB estado inicial con ID 3 = "Sin asignar"
+      driver.setIdEstado(estadoInicial);
       driver.setIdTipoVehiculo(tipoVehiculo);
       driver.setIdEmpleado(empleado);
       driver.setIdTipoCombustible(tipoCombustible);

@@ -40,6 +40,8 @@ public class DriverDto {
   @NotNull(message = "La dirección es obligatoria")
   private String direccion;
 
+  private Integer idEstado;
+
   @NotNull(message = "El ID del tipo de vehículo es obligatorio")
   private Integer idTipoVehiculo;
 

@@ -50,6 +50,11 @@ public class Driver extends BaseEntity {
     private String direccion;
 
     @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "idEstado",referencedColumnName = "id")
+    private Estado idEstado;
+
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo_vehiculo",referencedColumnName = "id")
     private TipoVehiculo idTipoVehiculo;
