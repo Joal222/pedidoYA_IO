@@ -47,4 +47,9 @@ public class TipoProductoImpl implements CrudServiceProcessingController<TipoPro
     public void delete(TipoProducto tipoProducto) {
         tipoProductoRepo.delete(tipoProducto);
     }
+
+    @Override
+    public List<TipoProducto> findByEstado(Integer i) {
+        return List.of();
+    }
 }

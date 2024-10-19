@@ -43,4 +43,9 @@ public class ProveedoresImpl implements CrudServiceProcessingController<Proveedo
     public void delete(Proveedores proveedores) {
         proveedoresRepo.delete(proveedores);
     }
+
+    @Override
+    public List<Proveedores> findByEstado(Integer i) {
+        return List.of();
+    }
 }

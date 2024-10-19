@@ -46,4 +46,9 @@ public class RolImpl implements CrudServiceProcessingController<Rol, Integer>{
     public void delete(Rol puesto) {
         rolDao.delete(puesto);
     }
+
+    @Override
+    public List<Rol> findByEstado(Integer i) {
+        return List.of();
+    }
 }

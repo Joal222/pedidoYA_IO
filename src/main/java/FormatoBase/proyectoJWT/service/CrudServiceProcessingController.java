@@ -8,4 +8,5 @@ public interface CrudServiceProcessingController<T,ID>{
     T findById(ID id);
     List<T> findAll();
     void delete(T entity);
+    List<T> findByEstado(ID i);
 }

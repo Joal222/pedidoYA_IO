@@ -79,16 +79,25 @@ public class OrderDetailsController {
                 throw new IllegalArgumentException("No hay pedidos o proveedores disponibles.");
             }
 
-            int[] demanda = orderDetailsService.obtenerDemanda(pedidos, request.getProductoId());
+            List<Pedido> pedidosProducto = pedidos.stream()
+                    .filter(pedido -> pedido.getPedidoProductoList().stream()
+                            .anyMatch(pedidoProducto -> pedidoProducto.getIdProducto().getId().equals(request.getProductoId())))
+                    .collect(Collectors.toList());
+
+            if (pedidosProducto.isEmpty()) {
+                throw new IllegalArgumentException("No se encontró demanda para el producto solicitado.");
+            }
+
+            int[] demanda = orderDetailsService.obtenerDemanda(pedidosProducto, request.getProductoId());
             int[] oferta = orderDetailsService.obtenerOferta(proveedores, request.getProductoId());
 
             if (demanda.length == 0 || oferta.length == 0) {
                 throw new IllegalArgumentException("No se encontró demanda u oferta para el producto solicitado.");
             }
 
-            BigDecimal[][] costos = orderDetailsService.obtenerCostos(pedidos, proveedores, request.getProductoId());
+            BigDecimal[][] costos = orderDetailsService.obtenerCostos(pedidosProducto, proveedores, request.getProductoId());
 
-            List<Driver> conductoresAsignados = orderDetailsService.asignarDrivers(pedidos, proveedores, request.getProductoId());
+            List<Driver> conductoresAsignados = orderDetailsService.asignarDrivers(pedidosProducto, proveedores, request.getProductoId());
 
             if (conductoresAsignados.isEmpty()) {
                 throw new IllegalArgumentException("No se pudo asignar conductores para los pedidos.");
@@ -96,13 +105,19 @@ public class OrderDetailsController {
 
             OptimalRouteResponse optimalRouteResponse = rutaOptimaSolver.resolverRutas(demanda, oferta, costos);
 
+            // Verificar si el solver devolvió asignaciones o no
+            if (optimalRouteResponse == null || optimalRouteResponse.getAsignaciones() == null || optimalRouteResponse.getAsignaciones().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo encontrar una solución óptima.");
+            }
+
             optimalRouteResponse.getAsignaciones().forEach(asignacion -> {
                 asignacion.setPedidoId(asignacion.getPedidoId() + 1);
                 asignacion.setProveedorId(asignacion.getProveedorId() + 1);
             });
 
+            // Actualizar el estado de los pedidos y conductores si hay asignaciones
             if (!optimalRouteResponse.getAsignaciones().isEmpty()) {
-                pedidos.forEach(pedido -> {
+                pedidosProducto.forEach(pedido -> {
                     pedido.setIdEstado(estadoService.findById(2)); // ID 2 = "En ruta"
                     pedidoService.save(pedido);
                 });
@@ -111,8 +126,6 @@ public class OrderDetailsController {
                     driver.setIdEstado(estadoService.findById(4)); // ID 4 = "Asignado - no disponible"
                     driverService.save(driver);
                 });
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudieron asignar pedidos a los conductores.");
             }
 
             List<DriverDtoSolver> conductoresAsignadosDto = conductoresAsignados.stream()
@@ -129,6 +142,7 @@ public class OrderDetailsController {
             optimalRouteResponse.setConductoresAsignados(conductoresAsignadosDto);
 
             return ResponseEntity.ok(optimalRouteResponse);
+
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
         } catch (Exception e) {
@@ -136,4 +150,5 @@ public class OrderDetailsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del sistema");
         }
     }
+
 }

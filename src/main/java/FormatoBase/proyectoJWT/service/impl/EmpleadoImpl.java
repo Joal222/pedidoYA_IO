@@ -44,4 +44,9 @@ public class EmpleadoImpl implements CrudServiceProcessingController<Empleado, I
     public void delete(Empleado empleado) {
         empleadoRepo.delete(empleado);
     }
+
+    @Override
+    public List<Empleado> findByEstado(Integer i) {
+        return List.of();
+    }
 }

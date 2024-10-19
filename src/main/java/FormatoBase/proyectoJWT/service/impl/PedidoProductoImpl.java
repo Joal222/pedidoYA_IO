@@ -44,4 +44,9 @@ public class PedidoProductoImpl implements CrudServiceProcessingController<Pedid
     public void delete(PedidoProducto pedidoProducto) {
         pedidoProductoRepo.delete(pedidoProducto);
     }
+
+    @Override
+    public List<PedidoProducto> findByEstado(Integer i) {
+        return List.of();
+    }
 }

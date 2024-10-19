@@ -46,4 +46,9 @@ public class ClienteProductoImpl implements CrudServiceProcessingController<Clie
     public void delete(ClienteProducto clienteProducto) {
          clienteProductoRepo.delete(clienteProducto);
     }
+
+    @Override
+    public List<ClienteProducto> findByEstado(Integer i) {
+        return List.of();
+    }
 }

@@ -45,4 +45,9 @@ public class RutaEntregaImpl implements CrudServiceProcessingController<RutaEntr
         rutaEntregaRepo.delete(rutaEntrega);
 
     }
+
+    @Override
+    public List<RutaEntrega> findByEstado(Integer i) {
+        return List.of();
+    }
 }

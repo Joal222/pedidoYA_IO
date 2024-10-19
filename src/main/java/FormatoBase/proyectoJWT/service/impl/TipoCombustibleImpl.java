@@ -44,4 +44,9 @@ public class TipoCombustibleImpl implements CrudServiceProcessingController<Tipo
     public void delete(TipoCombustible tipoCombustible) {
         tipoCombustibleRepo.delete(tipoCombustible);
     }
+
+    @Override
+    public List<TipoCombustible> findByEstado(Integer i) {
+        return List.of();
+    }
 }

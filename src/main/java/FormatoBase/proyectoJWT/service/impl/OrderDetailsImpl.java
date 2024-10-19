@@ -38,4 +38,9 @@ public class OrderDetailsImpl implements CrudServiceProcessingController<OrderDe
     public void delete(OrderDetails orderDetails) {
 
     }
+
+    @Override
+    public List<OrderDetails> findByEstado(Integer i) {
+        return List.of();
+    }
 }

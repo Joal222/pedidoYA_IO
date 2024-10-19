@@ -45,4 +45,9 @@ public class RutaRecoleccionImpl implements CrudServiceProcessingController<Ruta
     public void delete(RutaRecoleccion rutaRecoleccion) {
         rutaRecoleccionRepo.delete(rutaRecoleccion);
     }
+
+    @Override
+    public List<RutaRecoleccion> findByEstado(Integer i) {
+        return List.of();
+    }
 }

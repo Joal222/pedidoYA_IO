@@ -44,4 +44,9 @@ public class PuestoImpl implements CrudServiceProcessingController<Puesto, Integ
     public void delete(Puesto puesto) {
         puestoRepo.delete(puesto);
     }
+
+    @Override
+    public List<Puesto> findByEstado(Integer i) {
+        return List.of();
+    }
 }

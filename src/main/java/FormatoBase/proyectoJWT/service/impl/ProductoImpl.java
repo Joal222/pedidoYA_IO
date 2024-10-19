@@ -47,6 +47,11 @@ public class  ProductoImpl implements CrudServiceProcessingController<Productos,
         productosRepo.delete(productos);
     }
 
+    @Override
+    public List<Productos> findByEstado(Integer i) {
+        return List.of();
+    }
+
     // Nuevo método para obtener productos con pedidos
     @Transactional(readOnly = true)
     public List<Productos> obtenerProductosConPedidos() {

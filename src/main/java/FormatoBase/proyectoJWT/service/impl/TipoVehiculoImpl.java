@@ -46,4 +46,9 @@ public class TipoVehiculoImpl implements CrudServiceProcessingController<TipoVeh
         tipoVehiculoRepo.delete(tipoVehiculo);
 
     }
+
+    @Override
+    public List<TipoVehiculo> findByEstado(Integer i) {
+        return List.of();
+    }
 }

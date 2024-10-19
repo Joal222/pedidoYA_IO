@@ -1,7 +1,9 @@
 package FormatoBase.proyectoJWT.service.impl;
 
 import FormatoBase.proyectoJWT.model.entity.Driver;
+import FormatoBase.proyectoJWT.model.entity.Estado;
 import FormatoBase.proyectoJWT.model.repository.DriverRepository;
+import FormatoBase.proyectoJWT.model.repository.EstadoRepository;
 import FormatoBase.proyectoJWT.service.CrudServiceProcessingController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,9 @@ public class DriverImpl implements CrudServiceProcessingController<Driver, Integ
 
     @Autowired
     private DriverRepository driverRepository;
+
+    @Autowired
+    private CrudServiceProcessingController<Estado, Integer> estadoService;
 
     @Transactional
     @Override
@@ -43,5 +48,13 @@ public class DriverImpl implements CrudServiceProcessingController<Driver, Integ
     @Override
     public void delete(Driver driver) {
         driverRepository.delete(driver);
+    }
+
+    public List<Driver> findByEstado(Integer estadoId) {
+        Estado estado = estadoService.findById(estadoId); // Asegúrate de que existe el estado
+        if (estado == null) {
+            throw new IllegalArgumentException("Estado no encontrado");
+        }
+        return driverRepository.findByIdEstado(estado);
     }
 }

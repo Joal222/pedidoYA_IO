@@ -44,4 +44,9 @@ public class EstadoImpl implements CrudServiceProcessingController<Estado, Integ
     public void delete(Estado estado) {
         estadoRepo.delete(estado);
     }
+
+    @Override
+    public List<Estado> findByEstado(Integer i) {
+        return List.of();
+    }
 }
