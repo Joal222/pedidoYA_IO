@@ -22,6 +22,27 @@ public class RutaOptimaSolver implements IRutaOptimaSolver {
         int numProveedores = oferta.length;
         int numPedidos = demanda.length;
 
+        // Imprimir la matriz de demanda
+        System.out.println("Matriz de demanda:");
+        for (int j = 0; j < demanda.length; j++) {
+            System.out.println("Pedido " + j + ": " + demanda[j]);
+        }
+
+        // Imprimir la matriz de oferta
+        System.out.println("Matriz de oferta:");
+        for (int i = 0; i < oferta.length; i++) {
+            System.out.println("Proveedor " + i + ": " + oferta[i]);
+        }
+
+        // Imprimir la matriz de costos
+        System.out.println("Matriz de costos:");
+        for (int i = 0; i < costos.length; i++) {
+            for (int j = 0; j < costos[i].length; j++) {
+                System.out.print("Costo[" + i + "][" + j + "]: " + costos[i][j] + " ");
+            }
+            System.out.println(); // Salto de línea para cada fila
+        }
+
         // Variables de asignación: cuántos productos asignar de cada proveedor a cada pedido
         IntVar[][] asignacion = new IntVar[numProveedores][numPedidos];
         for (int i = 0; i < numProveedores; i++) {
@@ -49,14 +70,14 @@ public class RutaOptimaSolver implements IRutaOptimaSolver {
         IntVar[] costoVars = flattenCostos(flatCostos, model);
 
         // Definir la función objetivo (minimización de costos)
-        IntVar costoTotal = model.intVar("costoTotal", 0, 1000000);
+        IntVar costoTotal = model.intVar("costoTotal", 0, 1000000000);
         model.scalar(flatten(asignacion), toIntArray(flatCostos), "=", costoTotal).post();
 
         // Establecer la minimización del costo total
         model.setObjective(Model.MINIMIZE, costoTotal);
 
         // Resolver el modelo
-        OptimalRouteResponse response = new OptimalRouteResponse();
+        OptimalRouteResponse response = new OptimalRouteResponse();  // Se asegura la inicialización correcta
         if (model.getSolver().solve()) {
             List<AsignacionDto> asignaciones = new ArrayList<>();
             System.out.println("Solución óptima encontrada:");
@@ -94,11 +115,11 @@ public class RutaOptimaSolver implements IRutaOptimaSolver {
         return flat;
     }
 
-    // Método para convertir los BigDecimal[] en IntVar[]
+    // Método para convertir los BigDecimal[] en IntVar[] y redondear los valores
     private IntVar[] flattenCostos(BigDecimal[] flatCostos, Model model) {
         IntVar[] costoVars = new IntVar[flatCostos.length];
         for (int i = 0; i < flatCostos.length; i++) {
-            costoVars[i] = model.intVar("costo_" + i, flatCostos[i].intValue());
+            costoVars[i] = model.intVar("costo_" + i, flatCostos[i].intValueExact()); // Convierte BigDecimal a int
         }
         return costoVars;
     }
@@ -109,7 +130,7 @@ public class RutaOptimaSolver implements IRutaOptimaSolver {
         int k = 0;
         for (BigDecimal[] row : costos) {
             for (BigDecimal val : row) {
-                flat[k++] = val;
+                flat[k++] = val.setScale(0, BigDecimal.ROUND_HALF_UP); // Redondeo hacia el entero más cercano
             }
         }
         return flat;

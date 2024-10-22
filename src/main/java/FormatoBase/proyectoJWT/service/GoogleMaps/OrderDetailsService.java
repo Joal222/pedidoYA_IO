@@ -107,6 +107,14 @@ public class OrderDetailsService implements IOrderDetailsService {
                     costos[i][j] = calcularCostoPorDistancia(distanciaTotal, conductorAsignado);
                 }
             }
+            // Imprimir la matriz de costos
+            System.out.println("Matriz de costos calculados:");
+            for (int i = 0; i < proveedores.size(); i++) {
+                for (int j = 0; j < pedidos.size(); j++) {
+                    System.out.print("Costo[" + i + "][" + j + "]: " + costos[i][j] + " ");
+                }
+                System.out.println(); // Salto de línea para cada fila
+            }
             return costos;
         } catch (Exception e) {
             throw new ServiceException("Error al obtener los costos.", e);
@@ -199,14 +207,16 @@ public class OrderDetailsService implements IOrderDetailsService {
         try {
             BigDecimal precioCombustible = driver.getIdTipoCombustible().getPrecio();
             BigDecimal rendimientoGalon = driver.getRendimientoGalon();
-            BigDecimal costoPorGalon = precioCombustible.divide(rendimientoGalon, BigDecimal.ROUND_HALF_UP);
-            BigDecimal costoDistancia = costoPorGalon.multiply(distanciaTotal);
+            BigDecimal costoPorGalon = distanciaTotal.divide(rendimientoGalon, BigDecimal.ROUND_HALF_UP);
+            BigDecimal costoDistancia = costoPorGalon.multiply(precioCombustible);
+
 
             return costoDistancia.add(driver.getCostoActivacion());
         } catch (Exception e) {
             throw new ServiceException("Error al calcular el costo por distancia.", e);
         }
     }
+
 
     private Pedido obtenerPedidoPorId(Integer pedidoId) {
         return pedidoRepo.findById(pedidoId)
