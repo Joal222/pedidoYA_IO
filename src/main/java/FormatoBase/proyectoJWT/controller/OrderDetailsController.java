@@ -6,10 +6,7 @@ import FormatoBase.proyectoJWT.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.math.BigDecimal;
@@ -18,6 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/order-details")
+@CrossOrigin(origins = "*")
 public class OrderDetailsController {
 
     @Autowired
@@ -96,10 +94,15 @@ public class OrderDetailsController {
 
             OptimalRouteResponse optimalRouteResponse = rutaOptimaSolver.resolverRutas(demanda, oferta, costos);
 
-            optimalRouteResponse.getAsignaciones().forEach(asignacion -> {
-                asignacion.setPedidoId(asignacion.getPedidoId() + 1);
-                asignacion.setProveedorId(asignacion.getProveedorId() + 1);
-            });
+            // Verificación de null o lista vacía en asignaciones
+            if (optimalRouteResponse.getAsignaciones() != null && !optimalRouteResponse.getAsignaciones().isEmpty()) {
+                optimalRouteResponse.getAsignaciones().forEach(asignacion -> {
+                    asignacion.setPedidoId(asignacion.getPedidoId() + 1);
+                    asignacion.setProveedorId(asignacion.getProveedorId() + 1);
+                });
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se encontraron asignaciones para procesar.");
+            }
 
             if (!optimalRouteResponse.getAsignaciones().isEmpty()) {
                 pedidos.forEach(pedido -> {
