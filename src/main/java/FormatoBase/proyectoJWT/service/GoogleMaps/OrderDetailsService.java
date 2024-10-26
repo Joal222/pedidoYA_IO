@@ -38,7 +38,7 @@ public class OrderDetailsService implements IOrderDetailsService {
             Proveedores proveedor = obtenerProveedorPorProducto(productoId);
             Driver driver = obtenerDriverPorId(driverId);
 
-            BigDecimal distanciaTotal = calcularDistanciaEntreEntidades(driver, proveedor, pedido);
+            BigDecimal distanciaTotal = calcularDistanciaProveedorACliente(driver, proveedor, pedido);
             return calcularCostoPorDistancia(distanciaTotal, driver);
         } catch (Exception e) {
             throw new ServiceException("Error al calcular el costo del pedido.", e);
@@ -53,7 +53,7 @@ public class OrderDetailsService implements IOrderDetailsService {
             Proveedores proveedor = obtenerProveedorPorProducto(productoId);
             Driver driver = obtenerDriverPorId(driverId);
 
-            return calcularDistanciaEntreEntidades(driver, proveedor, pedido);
+            return calcularDistanciaProveedorACliente(driver, proveedor, pedido);
         } catch (Exception e) {
             throw new ServiceException("Error al obtener la distancia en km.", e);
         }
@@ -103,7 +103,7 @@ public class OrderDetailsService implements IOrderDetailsService {
                 for (int j = 0; j < pedidos.size(); j++) {
                     Pedido pedido = pedidos.get(j);
                     Driver conductorAsignado = conductoresAsignados.get(0);  // Solo un conductor asignado
-                    BigDecimal distanciaTotal = calcularDistanciaEntreEntidades(conductorAsignado, proveedor, pedido);
+                    BigDecimal distanciaTotal = calcularDistanciaProveedorACliente(conductorAsignado,proveedor, pedido);
                     costos[i][j] = calcularCostoPorDistancia(distanciaTotal, conductorAsignado);
                 }
             }
@@ -113,7 +113,7 @@ public class OrderDetailsService implements IOrderDetailsService {
                 for (int j = 0; j < pedidos.size(); j++) {
                     System.out.print("Costo[" + i + "][" + j + "]: " + costos[i][j] + " ");
                 }
-                System.out.println(); // Salto de línea para cada fila
+                System.out.println();
             }
             return costos;
         } catch (Exception e) {
@@ -187,7 +187,19 @@ public class OrderDetailsService implements IOrderDetailsService {
         }
     }
 
-    private BigDecimal calcularDistanciaEntreEntidades(Driver driver, Proveedores proveedor, Pedido pedido) {
+    /*
+    private BigDecimal calcularDistanciaProveedorACliente(Proveedores proveedor, Pedido pedido) {
+        try {
+            return googleMapsService.calcularDistancia(
+                    proveedor.getLatitud(), proveedor.getLongitud(),
+                    Double.parseDouble(pedido.getLatitud()), Double.parseDouble(pedido.getLongitud()));
+        } catch (Exception e) {
+            throw new ServiceException("Error al calcular la distancia entre el proveedor y el cliente.", e);
+        }
+    }
+*/
+
+    private BigDecimal calcularDistanciaProveedorACliente(Driver driver, Proveedores proveedor, Pedido pedido) {
         try {
             BigDecimal distanciaDriverAProveedor = googleMapsService.calcularDistancia(
                     driver.getLatitud(), driver.getLongitud(),
@@ -203,13 +215,13 @@ public class OrderDetailsService implements IOrderDetailsService {
         }
     }
 
+
     private BigDecimal calcularCostoPorDistancia(BigDecimal distanciaTotal, Driver driver) {
         try {
             BigDecimal precioCombustible = driver.getIdTipoCombustible().getPrecio();
             BigDecimal rendimientoGalon = driver.getRendimientoGalon();
             BigDecimal costoPorGalon = distanciaTotal.divide(rendimientoGalon, BigDecimal.ROUND_HALF_UP);
             BigDecimal costoDistancia = costoPorGalon.multiply(precioCombustible);
-
 
             return costoDistancia.add(driver.getCostoActivacion());
         } catch (Exception e) {
