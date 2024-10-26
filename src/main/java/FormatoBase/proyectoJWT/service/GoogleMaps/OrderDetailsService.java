@@ -38,7 +38,7 @@ public class OrderDetailsService implements IOrderDetailsService {
             Proveedores proveedor = obtenerProveedorPorProducto(productoId);
             Driver driver = obtenerDriverPorId(driverId);
 
-            BigDecimal distanciaTotal = calcularDistanciaProveedorACliente(driver, proveedor, pedido);
+            BigDecimal distanciaTotal = calcularDistanciaProveedorACliente(proveedor, pedido);
             return calcularCostoPorDistancia(distanciaTotal, driver);
         } catch (Exception e) {
             throw new ServiceException("Error al calcular el costo del pedido.", e);
@@ -53,7 +53,7 @@ public class OrderDetailsService implements IOrderDetailsService {
             Proveedores proveedor = obtenerProveedorPorProducto(productoId);
             Driver driver = obtenerDriverPorId(driverId);
 
-            return calcularDistanciaProveedorACliente(driver, proveedor, pedido);
+            return calcularDistanciaProveedorACliente(proveedor, pedido);
         } catch (Exception e) {
             throw new ServiceException("Error al obtener la distancia en km.", e);
         }
@@ -103,7 +103,7 @@ public class OrderDetailsService implements IOrderDetailsService {
                 for (int j = 0; j < pedidos.size(); j++) {
                     Pedido pedido = pedidos.get(j);
                     Driver conductorAsignado = conductoresAsignados.get(0);  // Solo un conductor asignado
-                    BigDecimal distanciaTotal = calcularDistanciaProveedorACliente(conductorAsignado,proveedor, pedido);
+                    BigDecimal distanciaTotal = calcularDistanciaProveedorACliente(proveedor, pedido);
                     costos[i][j] = calcularCostoPorDistancia(distanciaTotal, conductorAsignado);
                 }
             }
@@ -187,7 +187,6 @@ public class OrderDetailsService implements IOrderDetailsService {
         }
     }
 
-    /*
     private BigDecimal calcularDistanciaProveedorACliente(Proveedores proveedor, Pedido pedido) {
         try {
             return googleMapsService.calcularDistancia(
@@ -197,8 +196,9 @@ public class OrderDetailsService implements IOrderDetailsService {
             throw new ServiceException("Error al calcular la distancia entre el proveedor y el cliente.", e);
         }
     }
-*/
 
+
+    /*
     private BigDecimal calcularDistanciaProveedorACliente(Driver driver, Proveedores proveedor, Pedido pedido) {
         try {
             BigDecimal distanciaDriverAProveedor = googleMapsService.calcularDistancia(
@@ -214,7 +214,7 @@ public class OrderDetailsService implements IOrderDetailsService {
             throw new ServiceException("Error al calcular la distancia entre las entidades.", e);
         }
     }
-
+*/
 
     private BigDecimal calcularCostoPorDistancia(BigDecimal distanciaTotal, Driver driver) {
         try {
